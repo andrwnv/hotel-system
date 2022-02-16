@@ -1,9 +1,16 @@
 module Entities.Hotel where
 
-import Entities.Person 
+import Entities.VacationItem
+import Entities.HistoryItem
+import Entities.Employe
+import Entities.Tenant
 import Entities.Room 
 
 data Hotel = Hotel {
-    personal :: [Person],
-    rooms :: [Room]
+    employees       :: [Employe],
+    tenants         :: [Tenant],
+    rooms           :: [Room],
+    
+    history         :: [HistoryItem],
+    vacationList    :: [VacationItem]
 }

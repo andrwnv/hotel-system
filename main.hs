@@ -1,9 +1,14 @@
-import Entities.Person
-import Entities.Room
+import Entities.PersonBase
+import Entities.Employe
+import Entities.Tenant
 import Entities.Hotel
+import Entities.Room
+
+import Data.Time.Calendar
+import Data.Time
 
 main :: IO () 
 main = do
-    let s = Person "Alina" 12
-    print (show (age s) ++ name s)
+    let s = PersonBase "123" "123" "123" (fromGregorian 2018 10 27)
+    print (show (birthDay s))
 
