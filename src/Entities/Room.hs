@@ -6,6 +6,7 @@ import Entities.Tenant
 
 import Data.Time
 
+
 data Room = Room {
     roomNumber      :: Int,
     description     :: String,
