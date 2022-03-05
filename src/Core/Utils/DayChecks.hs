@@ -1,3 +1,5 @@
+{-# LANGUAGE ScopedTypeVariables, InstanceSigs #-}
+
 module Core.Utils.DayChecks where
 
 import Data.Time
