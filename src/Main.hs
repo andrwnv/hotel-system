@@ -1,9 +1,9 @@
-{-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, ScopedTypeVariables #-}
-
-{- Packing buttons with GtkBuilder example of GTK+ documentation. For information please refer to README -}
+{-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
 import qualified Data.Text.IO as T
 import Data.Text (Text, pack)
+import Data.Maybe
+import Data.List (sort, concat)
 import System.Environment (getArgs)
 
 import qualified GI.Gtk as Gtk
@@ -47,6 +47,22 @@ printHello builder t = do
   
   T.putStrLn $ "Hello from " <> text <> "."
 
+showSelectedColumn :: Gtk.Builder -> IO ()
+printHi builder = do
+  -- Getting text from selected item in Gtk.TreeView
+  Just entry <- getBuilderObj builder "tree" Gtk.TreeView
+  selection :: Gtk.TreeSelection <- #getSelection entry
+  treeModel :: (Bool, Gtk.TreeModel, Gtk.TreeIter) <- #getSelected selection
+
+  let (a, b, c) = treeModel
+  -- test1 <- #getStringFromIter b c
+  test :: Gtk.GValue <- #getValue b c 1
+  t :: (Maybe String) <- fromGValue test
+  
+  let txt :: String = fromJust t
+  print (show txt)
+
+  T.putStrLn $ "Hello from "
 
 main :: IO ()
 main = do
@@ -56,7 +72,7 @@ main = do
   Gtk.init $ Just targs
 
   let filename = case targs of
-                   [] -> "C:\\Users\\andrwnv\\Desktop\\gi-gtk-test\\src\\main.glade"
+                   [] -> "G:\\DEVELOP\\hotel\\src\\main.glade"
                    arg:[] -> arg
                    _ -> error "Too many command line arguments."
   T.putStrLn $ "filename=\"" <> filename <> "\""
@@ -67,15 +83,9 @@ main = do
   Just window <- getBuilderObj builder "window" Gtk.Window
   on window #destroy $ printQuit "windows close button"
 
-
-
-  -- let name = "button1"
-  -- connectBtnClick builder name $ do printHello builder "123"
+  let name = "rent"
+  connectBtnClick builder name $ do showSelectedColumn builder
   
-  -- Just test <- getMaxLength "testField"
-
-  -- T.putStrLn $ "filename=\"" <> test <> "\""
-
   currentDay <- now
   print (show currentDay)
 
