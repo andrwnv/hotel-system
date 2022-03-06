@@ -19,8 +19,6 @@ import Data.Int
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
-import qualified GI.GLib as GL
-
 import View.Misc as Misc
 
 
