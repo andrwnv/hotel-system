@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module View.Extracters where
+module View.Extractors where
 
 import Control.Monad
 import Data.Time.Format
@@ -46,7 +46,7 @@ extractSelectedRow_User builder treeViewId = do
     value :: (Maybe String) <- fromGValue gtkValue
     let lastName = fromMaybe "" value
 
-    gtkValue :: Gtk.GValue <- #getValue model iter 1
+    gtkValue :: Gtk.GValue <- #getValue model iter 2
     value :: (Maybe String) <- fromGValue gtkValue
     let phoneNumber = fromMaybe "" value
 

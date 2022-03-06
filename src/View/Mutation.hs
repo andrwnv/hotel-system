@@ -11,7 +11,9 @@ data ProfitView = ProfitView {
 
 data VacationView = VacationView {
     fullName    :: String,
-    startDay    :: Day,
-    endDay      :: Day
+    startDay    :: String,
+    endDay      :: String
 } deriving (Show)
+
+
 
