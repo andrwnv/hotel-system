@@ -2,7 +2,27 @@
 <!-- Generated with glade 3.38.2 -->
 <interface>
   <requires lib="gtk+" version="3.24"/>
-  <object class="GtkListStore" id="liststore1">
+  <object class="GtkListStore" id="profitStore">
+    <columns>
+      <!-- column-name test1 -->
+      <column type="gchararray"/>
+      <!-- column-name test2 -->
+      <column type="gchararray"/>
+      <!-- column-name test3 -->
+      <column type="gchararray"/>
+      <!-- column-name gdouble1 -->
+      <column type="gdouble"/>
+    </columns>
+    <data>
+      <row>
+        <col id="0" translatable="yes">Доход</col>
+        <col id="1" translatable="yes">2</col>
+        <col id="2" translatable="yes">06-03-2022</col>
+        <col id="3">500</col>
+      </row>
+    </data>
+  </object>
+  <object class="GtkListStore" id="userStore">
     <columns>
       <!-- column-name lastNameCl_ -->
       <column type="gchararray"/>
@@ -94,121 +114,75 @@
       </row>
     </data>
   </object>
-  <object class="GtkListStore" id="liststore2">
+  <object class="GtkListStore" id="vacationStore">
     <columns>
-      <!-- column-name column1 -->
+      <!-- column-name fullName -->
       <column type="gchararray"/>
-      <!-- column-name gchararray1 -->
+      <!-- column-name beginDay -->
       <column type="gchararray"/>
-      <!-- column-name gchararray2 -->
-      <column type="gchararray"/>
-      <!-- column-name gdouble1 -->
-      <column type="gdouble"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-        <col id="3">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-        <col id="3">0</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-        <col id="3">0</col>
-      </row>
-    </data>
-  </object>
-  <object class="GtkListStore" id="liststore3">
-    <columns>
-      <!-- column-name gchararray1 -->
-      <column type="gchararray"/>
-      <!-- column-name gchararray2 -->
-      <column type="gchararray"/>
-      <!-- column-name gchararray3 -->
-      <column type="gchararray"/>
-      <!-- column-name gchararray4 -->
+      <!-- column-name endDay -->
       <column type="gchararray"/>
     </columns>
     <data>
       <row>
-        <col id="0" translatable="yes"/>
+        <col id="0" translatable="yes">123123123123</col>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
       <row>
         <col id="0" translatable="yes"/>
         <col id="1" translatable="yes"/>
         <col id="2" translatable="yes"/>
-        <col id="3" translatable="yes"/>
       </row>
     </data>
   </object>
@@ -988,9 +962,10 @@
                           <object class="GtkTreeView" id="tree">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
-                            <property name="model">liststore1</property>
+                            <property name="model">userStore</property>
                             <property name="enable-search">False</property>
                             <property name="rubber-banding">True</property>
+                            <property name="enable-grid-lines">both</property>
                             <property name="activate-on-single-click">True</property>
                             <child internal-child="selection">
                               <object class="GtkTreeSelection"/>
@@ -1044,7 +1019,7 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="rent">
                         <property name="label" translatable="yes">Заселить</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
@@ -1114,46 +1089,63 @@
                     <property name="can-focus">True</property>
                     <property name="shadow-type">in</property>
                     <child>
-                      <object class="GtkTreeView">
+                      <object class="GtkTreeView" id="profitTree">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="model">liststore2</property>
+                        <property name="model">profitStore</property>
+                        <property name="enable-search">False</property>
+                        <property name="search-column">0</property>
+                        <property name="rubber-banding">True</property>
+                        <property name="enable-grid-lines">both</property>
+                        <property name="activate-on-single-click">True</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn">
+                          <object class="GtkTreeViewColumn" id="lastNameCl1">
                             <property name="title" translatable="yes">Тип</property>
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Комната</property>
+                          <object class="GtkTreeViewColumn" id="firstNameCl1">
+                            <property name="title" translatable="yes">Номер комнаты</property>
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn">
+                          <object class="GtkTreeViewColumn" id="phoneNumberCl1">
                             <property name="title" translatable="yes">Дата</property>
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">2</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
                         <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Сумма, Руб</property>
+                          <object class="GtkTreeViewColumn" id="qwerqwerqwer">
+                            <property name="title" translatable="yes">Сумма, Руб.</property>
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">3</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
@@ -1282,7 +1274,7 @@
                       <object class="GtkTreeView">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
-                        <property name="model">liststore3</property>
+                        <property name="model">vacationStore</property>
                         <child internal-child="selection">
                           <object class="GtkTreeSelection"/>
                         </child>
@@ -1292,6 +1284,9 @@
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">0</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
@@ -1301,6 +1296,9 @@
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">1</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
@@ -1310,15 +1308,9 @@
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>
-                            </child>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkTreeViewColumn">
-                            <property name="title" translatable="yes">Кол-во оставшихся дней</property>
-                            <property name="expand">True</property>
-                            <child>
-                              <object class="GtkCellRendererText"/>
+                              <attributes>
+                                <attribute name="text">2</attribute>
+                              </attributes>
                             </child>
                           </object>
                         </child>
