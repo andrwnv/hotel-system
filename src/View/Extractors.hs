@@ -71,3 +71,11 @@ extractDate builder calendarId = do
     (yyyy, mm, dd) <- Gtk.calendarGetDate calendar
 
     return $ fromGregorian (fromIntegral yyyy) (fromIntegral mm + 1) (fromIntegral dd)
+
+-- Gtk.ComboBoxText extract user comboBox selection
+extractComboBoxText :: Gtk.Builder -> Text -> IO (Maybe Text)
+extractComboBoxText builder comboBoxId = do
+    Just comboBox <- Misc.getBuilderObj builder comboBoxId Gtk.ComboBoxText
+    selectedItem <- #getActiveText comboBox
+
+    return selectedItem
