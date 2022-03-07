@@ -56,3 +56,8 @@ addRowToVacationView builder listStoreId vacation = do
     #setValue store newIter 0 _fullName
     #setValue store newIter 1 _startDay
     #setValue store newIter 2 _endDay
+
+addComboBoxItem :: Gtk.Builder -> Text -> Text -> IO ()
+addComboBoxItem builder comboBoxId text = do
+    Just comboBox <- Misc.getBuilderObj builder comboBoxId Gtk.ComboBoxText
+    #appendText comboBox text
