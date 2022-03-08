@@ -4,7 +4,12 @@
     LambdaCase, InstanceSigs 
 #-}
 
-module View.Сonnectors where
+module View.Connectors where
+
+import Data.Text (Text)
+
+import qualified GI.Gtk as Gtk
+import Data.GI.Base
 
 import View.Misc as Misc
 
@@ -16,7 +21,7 @@ connectButtonClicked builder buttonId handler = Misc.getBuilderObj builder butto
   Nothing -> return ()
 
 connectComboBoxTextSelect :: Gtk.Builder -> Text -> IO () -> IO ()
-connectComboBoxSelect builder comboId handler = getBuilderObj builder comboId Gtk.ComboBoxText >>= \case
+connectComboBoxTextSelect builder comboId handler = getBuilderObj builder comboId Gtk.ComboBoxText >>= \case
   Just comboBox -> do 
     on comboBox #changed $ do handler
     return ()
