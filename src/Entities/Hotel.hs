@@ -13,4 +13,4 @@ data Hotel = Hotel {
     
     history         :: [HistoryItem],
     vacationList    :: [VacationItem]
-}
+} deriving (Show, Read)

@@ -12,4 +12,4 @@ data Employe = Employe {
     startDate       :: Day,
     positionName    :: String,
     email           :: String
-}
+} deriving (Show, Read)

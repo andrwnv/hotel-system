@@ -18,4 +18,4 @@ data Room = Room {
 
     busyTime        :: [Day],
     busyBy          :: [Tenant]
-}
+} deriving (Show, Read)

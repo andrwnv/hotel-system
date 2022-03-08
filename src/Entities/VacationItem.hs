@@ -7,4 +7,4 @@ import Data.Time
 data VacationItem = VacationItem {
     employe :: Employe,
     dates   :: [Day]
-}
+} deriving (Show, Read)

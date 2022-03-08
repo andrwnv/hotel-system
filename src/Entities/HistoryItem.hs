@@ -10,4 +10,4 @@ data HistoryItem = HistoryItem {
     tenant          :: Tenant,
     totalPrice      :: Double,
     reservationDate :: Day
-}
+} deriving (Show, Read)
