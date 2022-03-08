@@ -61,3 +61,8 @@ addComboBoxItem :: Gtk.Builder -> Text -> Text -> IO ()
 addComboBoxItem builder comboBoxId text = do
     Just comboBox <- Misc.getBuilderObj builder comboBoxId Gtk.ComboBoxText
     #appendText comboBox text
+
+changeLabelText :: Gtk.Builder -> Text -> Text -> IO ()
+changeLabelText builder labelId text = do
+    Just label <- Misc.getBuilderObj builder labelId Gtk.Label
+    #setText label text
