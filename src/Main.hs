@@ -11,32 +11,18 @@ import Data.GI.Base
 
 import Core.Utils.DayChecks
 
+import View.Extractors
+import View.Connectors
+import View.Mutation
+import View.Misc
+
+roomComboBox_ID :: Text = "roomComboBox"
 
 printQuit :: Text -> IO ()
 printQuit t = do
   T.putStrLn $ "Quitting by " <> t <> "."
   Gtk.mainQuit
   return ()
-
-getBuilderObj :: forall o'
-               . GObject o' 
-               => Gtk.Builder 
-               -> Text 
-               -> (ManagedPtr o' -> o') 
-               -> IO (Maybe o')
-getBuilderObj builder name gtkConstr = #getObject builder name >>= \case 
-  Just obj -> castTo gtkConstr obj
-  Nothing -> do
-    T.putStrLn $ "Object named '" <> name <> "' could not be found."
-    return Nothing
-
--- Be aware that this function silently ignores absent names
-connectBtnClick :: Gtk.Builder -> Text -> IO () -> IO ()
-connectBtnClick builder name handler = getBuilderObj builder name Gtk.Button >>= \case
-  Just button -> do 
-    on button #clicked $ do handler
-    return ()
-  Nothing -> return ()
 
 printHello :: Gtk.Builder -> Text -> IO ()
 printHello builder t = do
@@ -48,20 +34,11 @@ printHello builder t = do
   T.putStrLn $ "Hello from " <> text <> "."
 
 showSelectedColumn :: Gtk.Builder -> IO ()
-printHi builder = do
+showSelectedColumn builder = do
   -- Getting text from selected item in Gtk.TreeView
-  Just entry <- getBuilderObj builder "tree" Gtk.TreeView
-  selection :: Gtk.TreeSelection <- #getSelection entry
-  treeModel :: (Bool, Gtk.TreeModel, Gtk.TreeIter) <- #getSelected selection
-
-  let (a, b, c) = treeModel
-  -- test1 <- #getStringFromIter b c
-  test :: Gtk.GValue <- #getValue b c 1
-  t :: (Maybe String) <- fromGValue test
-  
-  let txt :: String = fromJust t
-  print (show txt)
-
+  value <- extractSelectedRow_User builder "tree"
+  let t = fromJust value
+  print (show (t))
   T.putStrLn $ "Hello from "
 
 main :: IO ()
@@ -84,9 +61,23 @@ main = do
   on window #destroy $ printQuit "windows close button"
 
   let name = "rent"
-  connectBtnClick builder name $ do showSelectedColumn builder
+  connectButtonClicked builder name $ do showSelectedColumn builder
   
   currentDay <- now
   print (show currentDay)
+
+  value <- extractSelectedRow_User builder "profitTree"
+  let t = fromJust value
+  print (show (t))
+
+  addRowToVacationView builder "vacationStore" (VacationView "123" "123" "123")
+  selectedDate <- extractDate builder "birthDayCal"
+
+  Just txtSelect <- extractComboBoxText builder roomComboBox_ID
+  print(show(txtSelect))
+  
+  addComboBoxItem builder "roomComboBox" "test123132"
+
+  changeLabelText builder "totalProfitLabel" "100000,00 р."
 
   Gtk.main

@@ -404,7 +404,7 @@
                               </packing>
                             </child>
                             <child>
-                              <object class="GtkCalendar">
+                              <object class="GtkCalendar" id="birthDayCal">
                                 <property name="name">calendar</property>
                                 <property name="visible">True</property>
                                 <property name="can-focus">True</property>
@@ -607,7 +607,7 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkComboBoxText">
+                      <object class="GtkComboBoxText" id="roomComboBox">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
                         <property name="active">0</property>
