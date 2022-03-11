@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module View.Misc where
+module Misc where
 
 import qualified Data.Text.IO as Console
 import Data.Text (Text)

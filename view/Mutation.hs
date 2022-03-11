@@ -4,7 +4,7 @@
     LambdaCase, InstanceSigs
 #-}
 
-module View.Mutation where
+module Mutation where
 
 import Data.Text (Text)
 import Data.Maybe
@@ -12,7 +12,7 @@ import Data.Maybe
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
-import View.Misc as Misc
+import Misc
 
 
 data ProfitView = ProfitView {
@@ -25,7 +25,7 @@ data ProfitView = ProfitView {
 
 addRowToProfitView :: Gtk.Builder -> Text -> ProfitView -> IO ()
 addRowToProfitView builder listStoreId profit = do
-    Just store <- Misc.getBuilderObj builder listStoreId Gtk.ListStore
+    Just store <- getBuilderObj builder listStoreId Gtk.ListStore
 
     _profitType <- toGValue $ Just $ profitType profit
     _roomNumber <- toGValue $ Just $ roomNumber profit
@@ -40,10 +40,10 @@ addRowToProfitView builder listStoreId profit = do
 
 addComboBoxItem :: Gtk.Builder -> Text -> Text -> IO ()
 addComboBoxItem builder comboBoxId text = do
-    Just comboBox <- Misc.getBuilderObj builder comboBoxId Gtk.ComboBoxText
+    Just comboBox <- getBuilderObj builder comboBoxId Gtk.ComboBoxText
     #appendText comboBox text
 
 changeLabelText :: Gtk.Builder -> Text -> Text -> IO ()
 changeLabelText builder labelId text = do
-    Just label <- Misc.getBuilderObj builder labelId Gtk.Label
+    Just label <- getBuilderObj builder labelId Gtk.Label
     #setText label text

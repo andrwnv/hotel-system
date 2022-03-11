@@ -1,4 +1,4 @@
-module Entities.PersonBase where
+module PersonBase where
 
 import Data.Time
 

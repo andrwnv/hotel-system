@@ -1,9 +1,9 @@
-module Core.Rent where
+module Rent where
 
-import Core.Utils.DayChecks
+import DayChecks
 
-import Entities.Tenant
-import Entities.Room
+import Tenant
+import Room
 import Data.Time
 
 data RentType = Room | Bool

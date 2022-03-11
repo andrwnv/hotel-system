@@ -1,8 +1,7 @@
-module Entities.Room where
+module Room where
 
-import Entities.RoomComfortItem
-import Entities.Employe
-import Entities.Tenant
+import RoomComfortItem
+import Tenant
 
 import Data.Time
 

@@ -4,7 +4,7 @@
     LambdaCase, InstanceSigs
 #-}
 
-module View.Extractors where
+module Extractors where
 
 import Control.Monad
 
@@ -19,7 +19,7 @@ import Data.Int
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
-import View.Misc as Misc
+import Misc
 
 
 data UserView = UserView {
@@ -32,7 +32,7 @@ data UserView = UserView {
 -- Gtk.Entry extract user input
 extractEntryText :: Gtk.Builder -> Text -> IO Text
 extractEntryText builder entryId = do
-    Just entry <- Misc.getBuilderObj builder entryId Gtk.Entry
+    Just entry <- getBuilderObj builder entryId Gtk.Entry
     buffer :: Gtk.EntryBuffer <- #getBuffer entry
     text :: Text <- #getText buffer
     return text
@@ -40,7 +40,7 @@ extractEntryText builder entryId = do
 -- Gtk.TreeView extract user treeView selection
 extractSelectedRow_User :: Gtk.Builder -> Text -> IO (Maybe UserView)
 extractSelectedRow_User builder treeViewId = do
-    Just treeView <- Misc.getBuilderObj builder treeViewId Gtk.TreeView
+    Just treeView <- getBuilderObj builder treeViewId Gtk.TreeView
     selection :: Gtk.TreeSelection <- #getSelection treeView
     treeModel :: (Bool, Gtk.TreeModel, Gtk.TreeIter) <- #getSelected selection
 
@@ -67,7 +67,7 @@ extractSelectedRow_User builder treeViewId = do
 -- Gtk.Calendar extract user date selection
 extractDate :: Gtk.Builder -> Text -> IO Day
 extractDate builder calendarId = do
-    Just calendar <- Misc.getBuilderObj builder calendarId Gtk.Calendar
+    Just calendar <- getBuilderObj builder calendarId Gtk.Calendar
     (yyyy, mm, dd) <- Gtk.calendarGetDate calendar
 
     return $ fromGregorian (fromIntegral yyyy) (fromIntegral mm + 1) (fromIntegral dd)
@@ -75,7 +75,7 @@ extractDate builder calendarId = do
 -- Gtk.ComboBoxText extract user comboBox selection
 extractComboBoxText :: Gtk.Builder -> Text -> IO (Maybe Text)
 extractComboBoxText builder comboBoxId = do
-    Just comboBox <- Misc.getBuilderObj builder comboBoxId Gtk.ComboBoxText
+    Just comboBox <- getBuilderObj builder comboBoxId Gtk.ComboBoxText
     selectedItem <- #getActiveText comboBox
 
     return selectedItem

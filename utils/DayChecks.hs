@@ -1,13 +1,13 @@
 {-# LANGUAGE ScopedTypeVariables, InstanceSigs #-}
 
-module Core.Utils.DayChecks where
+module DayChecks where
 
 import Data.Time
 import Data.Time.Calendar
 import Data.Dynamic
 
 now :: IO Day
-now = do
+now = do 
     now <- getCurrentTime
     let (year, month, day) = toGregorian $ utctDay now
     let currentDate = (fromGregorian year month day)

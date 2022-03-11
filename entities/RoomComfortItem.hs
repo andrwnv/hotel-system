@@ -1,4 +1,4 @@
-module Entities.RoomComfortItem where
+module RoomComfortItem where
 
 data RoomComfortItem = RoomComfortItem {
     price       :: Double,

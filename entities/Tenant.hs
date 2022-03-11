@@ -1,6 +1,6 @@
-module Entities.Tenant where
+module Tenant where
 
-import Entities.PersonBase
+import PersonBase
 
 data Tenant = Tenant {
     base        :: PersonBase,

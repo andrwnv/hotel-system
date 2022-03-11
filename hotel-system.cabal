@@ -13,14 +13,43 @@ build-type:          Simple
 cabal-version:       >=1.10
 extra-source-files:  README.md
 
-executable hotel-system
-  hs-source-dirs:      src
+library Entities
+  hs-source-dirs:      entities
+  exposed-modules:     HistoryItem, Hotel, PersonBase, Room, RoomComfortItem, Tenant
+  build-depends:       base >= 4.7 && < 5, time
+  default-language:    Haskell2010
+
+library View
+  hs-source-dirs:      view
+  exposed-modules:     Connectors, Extractors, Misc, Mutation
+  build-depends:       base >= 4.7 && < 5, text, time
+                     , haskell-gi-base
+                     , gi-gtk
+                     , gi-gio
+                     , gi-gdk
+  default-language:    Haskell2010
+
+library Utils
+  hs-source-dirs:      utils
+  exposed-modules:     DayChecks
+  build-depends:       base >= 4.7 && < 5, time
+  default-language:    Haskell2010
+
+library Core
+  hs-source-dirs:      core
+  exposed-modules:     Rent
+  build-depends:       base >= 4.7 && < 5, time, Entities, Utils
+  default-language:    Haskell2010
+
+executable HotelSystem
+  hs-source-dirs:      exec
   main-is:             Main.hs
   default-language:    Haskell2010
-  build-depends:       base >= 4.7 && < 5
-                     , gi-gtk
+  build-depends:       base >= 4.7 && < 5, text, time
+                     , Entities
+                     , View
+                     , Core
+                     , Utils
                      , haskell-gi-base
-                     , gi-gio
-                     , text
+                     , gi-gtk
                      , gi-gdk
-                     , time

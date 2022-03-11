@@ -9,12 +9,12 @@ import System.Environment (getArgs)
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
-import Core.Utils.DayChecks
+import DayChecks
 
-import View.Extractors
-import View.Connectors
-import View.Mutation
-import View.Misc
+import Extractors
+import Connectors
+import Mutation
+import Misc
 
 roomComboBox_ID :: Text = "roomComboBox"
 
@@ -49,7 +49,7 @@ main = do
   Gtk.init $ Just targs
 
   let filename = case targs of
-                   [] -> "G:\\DEVELOP\\hotel\\src\\main.glade"
+                   [] -> "G:\\DEVELOP\\hotel\\exec\\main.glade"
                    arg:[] -> arg
                    _ -> error "Too many command line arguments."
   T.putStrLn $ "filename=\"" <> filename <> "\""
@@ -70,7 +70,6 @@ main = do
   let t = fromJust value
   print (show (t))
 
-  addRowToVacationView builder "vacationStore" (VacationView "123" "123" "123")
   selectedDate <- extractDate builder "birthDayCal"
 
   Just txtSelect <- extractComboBoxText builder roomComboBox_ID

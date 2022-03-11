@@ -1,7 +1,7 @@
-module Entities.HistoryItem where
+module HistoryItem where
 
-import Entities.Tenant
-import Entities.Room
+import Tenant
+import Room
 
 import Data.Time
 

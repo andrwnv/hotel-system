@@ -4,17 +4,17 @@
     LambdaCase, InstanceSigs 
 #-}
 
-module View.Connectors where
+module Connectors where
 
 import Data.Text (Text)
 
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
-import View.Misc as Misc
+import Misc
 
 connectButtonClicked :: Gtk.Builder -> Text -> IO () -> IO ()
-connectButtonClicked builder buttonId handler = Misc.getBuilderObj builder buttonId Gtk.Button >>= \case
+connectButtonClicked builder buttonId handler = getBuilderObj builder buttonId Gtk.Button >>= \case
   Just button -> do 
     on button #clicked $ do handler
     return ()
