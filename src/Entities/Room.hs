@@ -8,14 +8,12 @@ import Data.Time
 
 
 data Room = Room {
-    roomNumber      :: Int,
-    description     :: String,
-    price           :: Double,
-    comforts        :: [RoomComfortItem],
-    
-    lastClearDate   :: Day,
-    clearBy         :: [Employe],
+    roomNumber  :: Int,
+    description :: String,
+    price       :: Double,
+    comforts    :: [RoomComfortItem],
+    dayExpenses :: Double,
 
-    busyTime        :: [Day],
-    busyBy          :: [Tenant]
+    busyTime    :: [Day],
+    busyBy      :: [Tenant]
 } deriving (Show, Read)

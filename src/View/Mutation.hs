@@ -22,12 +22,6 @@ data ProfitView = ProfitView {
     summ         :: Double
 } deriving (Show)
 
-data VacationView = VacationView {
-    fullName    :: String,
-    startDay    :: String,
-    endDay      :: String
-} deriving (Show)
-
 
 addRowToProfitView :: Gtk.Builder -> Text -> ProfitView -> IO ()
 addRowToProfitView builder listStoreId profit = do
@@ -43,19 +37,6 @@ addRowToProfitView builder listStoreId profit = do
     #setValue store newIter 1 _roomNumber
     #setValue store newIter 2 _date
     #setValue store newIter 3 _sum
-
-addRowToVacationView :: Gtk.Builder -> Text -> VacationView -> IO ()
-addRowToVacationView builder listStoreId vacation = do
-    Just store <- Misc.getBuilderObj builder listStoreId Gtk.ListStore
-
-    _fullName <- toGValue $ Just $ fullName vacation
-    _startDay <- toGValue $ Just $ startDay vacation
-    _endDay <- toGValue $ Just $ endDay vacation
-
-    newIter :: Gtk.TreeIter <- #append store
-    #setValue store newIter 0 _fullName
-    #setValue store newIter 1 _startDay
-    #setValue store newIter 2 _endDay
 
 addComboBoxItem :: Gtk.Builder -> Text -> Text -> IO ()
 addComboBoxItem builder comboBoxId text = do
