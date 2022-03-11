@@ -5,7 +5,7 @@ import Tenant
 
 import Data.Time
 
-data Rent = Tuple ([Tenant], [Day]) deriving (Show, Read)
+type Rent = ([Tenant], [Day]) 
 
 data Room = Room {
     roomNumber   :: Int,
