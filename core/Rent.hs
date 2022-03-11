@@ -14,11 +14,11 @@ _isSameDates pair1 pair2 = result
         result = pair1!!0 == pair2!!0 && pair1!!1 == pair2!!1
 
 selectedDaysBusy :: [Rent] -> [Day] -> Bool
-selectedDaysBusy [] _ = True
+selectedDaysBusy [] _ = False
 selectedDaysBusy (x:xs) selectedDays 
     | (selectEnd < rentBegin || selectBegin > rentEnd)
-        = True || selectedDaysBusy xs selectedDays
-    | otherwise = False
+        = selectedDaysBusy xs selectedDays
+    | otherwise = True
     where
         rentDays :: [Day] = (snd x)
         selectBegin = selectedDays!!0
