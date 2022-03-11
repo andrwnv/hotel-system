@@ -1,7 +1,5 @@
 name:                hotel-system
-version:             0.1.0.0
--- synopsis:
--- description:
+version:             0.1
 homepage:            https://github.com/andrwnv/hotel-system#readme
 license:             BSD3
 license-file:        LICENSE
