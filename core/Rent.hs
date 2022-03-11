@@ -1,4 +1,6 @@
-module Rent where
+{-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
+
+module Rent (selectedDaysBusy) where
 
 import DayChecks
 
@@ -6,10 +8,25 @@ import Tenant
 import Room
 import Data.Time
 
-data RentType = Room | Bool
+_isSameDates :: [Day] -> [Day] -> Bool
+_isSameDates pair1 pair2 = result
+    where
+        result = pair1!!0 == pair2!!0 && pair1!!1 == pair2!!1
 
--- rent :: Room -> [Tenant] -> [Day] -> Room
+selectedDaysBusy :: [Rent] -> [Day] -> Bool
+selectedDaysBusy [] _ = True
+selectedDaysBusy (x:xs) selectedDays 
+    | (selectEnd < rentBegin || selectBegin > rentEnd)
+        = True || selectedDaysBusy xs selectedDays
+    | otherwise = False
+    where
+        rentDays :: [Day] = (snd x)
+        selectBegin = selectedDays!!0
+        selectEnd = selectedDays!!1
+        rentBegin = rentDays!!0
+        rentEnd = rentDays!!1
+
+-- rent :: Room -> [Tenant] -> [Day] -> IO (Maybe Room)
 -- rent selectedRoom tenants selectedDays = 
---     let isCorrect = do
---                     _isCorrectDays <- isCorrectDatePair selectedDays
+--     isCorrectDays <- isCorrectDatePair selectedDays
 --     return selectedRoom
