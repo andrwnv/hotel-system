@@ -8,4 +8,4 @@ data PersonBase = PersonBase {
     lastName    :: String,
     phoneNumer  :: String,
     birthDay    :: Day
-} deriving (Show, Read)
+} deriving (Show, Read, Eq)
