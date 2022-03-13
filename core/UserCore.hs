@@ -31,3 +31,13 @@ createUser tenants newTenant
         person = base newTenant
         res = tenants ++ [newTenant]
 
+isUserEq :: PersonBase -> PersonBase -> Bool
+isUserEq p1 p2 = (firstName p1) == (firstName p2) && (lastName p1) == (lastName p2) && (phoneNumer p1) == (phoneNumer p2)
+
+deleteUser :: [Tenant] -> PersonBase -> [Tenant]
+deleteUser [] _ = []
+deleteUser (x:xs) user
+    | isUserEq _base user = deleteUser xs user
+    | otherwise = (deleteUser xs user) ++ [x]
+    where
+        _base = base x
