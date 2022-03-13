@@ -19,7 +19,7 @@ library Entities
 
 library View
   hs-source-dirs:      view
-  exposed-modules:     Connectors, Extractors, Misc, Mutation
+  exposed-modules:     Connectors, Extractors, Misc, Mutation, ViewID
   build-depends:       base >= 4.7 && < 5, text, time
                      , haskell-gi-base
                      , gi-gtk
@@ -35,7 +35,7 @@ library Utils
 
 library Core
   hs-source-dirs:      core
-  exposed-modules:     Rent
+  exposed-modules:     Rent, UserCore
   build-depends:       base >= 4.7 && < 5, time, Entities, Utils
   default-language:    Haskell2010
 
