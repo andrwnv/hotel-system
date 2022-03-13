@@ -6,6 +6,9 @@ import Data.Maybe
 import Data.List (sort, concat)
 import System.Environment (getArgs)
 
+import Data.IORef
+import Control.Monad
+
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
@@ -15,6 +18,21 @@ import Extractors
 import Connectors
 import Mutation
 import Misc
+import Rent
+
+import Data.Time.Calendar
+import PersonBase
+import Tenant
+
+import UserCore
+
+import Hotel
+import Room
+import RoomComfortItem
+
+import Combiner
+
+import qualified ViewID as ID
 
 roomComboBox_ID :: Text = "roomComboBox"
 
@@ -23,15 +41,6 @@ printQuit t = do
   T.putStrLn $ "Quitting by " <> t <> "."
   Gtk.mainQuit
   return ()
-
-printHello :: Gtk.Builder -> Text -> IO ()
-printHello builder t = do
-  -- Getting text from Gtk.Entry
-  Just entry <- getBuilderObj builder "testField" Gtk.Entry
-  buffer :: Gtk.EntryBuffer <- #getBuffer entry
-  text :: Text <- #getText buffer
-  
-  T.putStrLn $ "Hello from " <> text <> "."
 
 showSelectedColumn :: Gtk.Builder -> IO ()
 showSelectedColumn builder = do
@@ -62,21 +71,49 @@ main = do
 
   let name = "rent"
   connectButtonClicked builder name $ do showSelectedColumn builder
+
+  let test = [Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1), Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)]
+  let room = Room 1 "123" [RoomComfortItem 12.0 "456" True] 100.29 [] [] []
+
+  hotelGlobalInstance <- newIORef $ Hotel [] [room] []
+
+  connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
+  connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
   
-  currentDay <- now
-  print (show currentDay)
-
-  value <- extractSelectedRow_User builder "profitTree"
-  let t = fromJust value
-  print (show (t))
-
-  selectedDate <- extractDate builder "birthDayCal"
-
-  Just txtSelect <- extractComboBoxText builder roomComboBox_ID
-  print(show(txtSelect))
+  -- value <- extractSelectedRow_User builder "profitTree"
+  -- let t = fromJust value 
+  -- print (show (t))
   
-  addComboBoxItem builder "roomComboBox" "test123132"
+  -- selectedDate <- extractDate builder "birthDayCal"
+ 
+  -- Just txtSelect <- extractComboBoxText builder roomComboBox_ID
+  -- print(show(txtSelect))
+  
+  -- addComboBoxItem builder "roomComboBox" "test123132"
 
-  changeLabelText builder "totalProfitLabel" "100000,00 р."
+  -- changeLabelText builder "totalProfitLabel" "100000,00 р."
+
+  -- let tenant = Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)
+  -- let person = PersonBase "1234" "123" "123" (fromGregorian 2022 03 08)
+
+  -- print $ isUserExist [tenant] person
+
+  -- let select = [(fromGregorian 2022 03 10), (fromGregorian 2022 03 18)]
+  -- let begin = (fromGregorian 2022 03 11)
+  -- let end = (fromGregorian 2022 03 20)
+ 
+  -- let selectBegin = select!!0
+  -- let selectEnd = select!!1
+  -- let rentBegin = begin
+  -- let rentEnd = end
+
+  -- let rent = [([tenant], [begin, end]), ([tenant], [(fromGregorian 2022 03 21), (fromGregorian 2022 03 25)])]
+  -- print $ selectedDaysBusy rent select
+
+  -- -- writeFile "file.txt" (show test)
+  -- contents :: String <- readFile "file.txt"
+  -- let arr :: [Tenant] = read contents
+
+  -- print $ show arr
 
   Gtk.main

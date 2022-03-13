@@ -22,6 +22,10 @@ import Hotel
 import Extractors
 import qualified ViewID as ID 
 
+-- Utils
+import DayChecks
+
+
 createUserHandler :: Gtk.Builder -> IORef Hotel -> IO ()
 createUserHandler uiBuilder hotel = do
     phoneNumber     <- extractEntryText uiBuilder (ID.create_PhoneNumberFieldID)
@@ -51,5 +55,19 @@ createUserHandler uiBuilder hotel = do
 
 deleteUserHandler :: Gtk.Builder -> IORef Hotel -> IO()
 deleteUserHandler uiBuilder hotel = do
-    x <- readIORef hotel
-    print x
+    phoneNumber <- extractEntryText uiBuilder (ID.delete_PhoneNumberFieldID)
+    firstName   <- extractEntryText uiBuilder (ID.delete_FirstNameFieldID)
+    lastName    <- extractEntryText uiBuilder (ID.delete_LastNameFieldID)
+
+    hotelCopy <- readIORef hotel
+    
+    date <- now
+    let baseForDelete = PersonBase (unpack firstName) (unpack lastName) (unpack phoneNumber) date
+
+    let _users = deleteUser (tenants hotelCopy) baseForDelete
+    let _rooms   = rooms hotelCopy
+    let _history = history hotelCopy
+
+    writeIORef hotel (Hotel _users _rooms _history)
+
+    print $ "[DELETE]: New user list -> " ++ show _users
