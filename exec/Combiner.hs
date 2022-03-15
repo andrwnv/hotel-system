@@ -80,12 +80,11 @@ deleteUserHandler uiBuilder hotel = do
 
 
 -- Profit table section.
-_loadProfitTable :: Gtk.Builder -> [HistoryItem] -> IO (Bool)
-_loadProfitTable _ [] = return True
+_loadProfitTable :: Gtk.Builder -> [HistoryItem] -> IO ()
+_loadProfitTable _ [] = return ()
 _loadProfitTable uiBuilder (x:xs) = do
     Mut.addRowToProfitView uiBuilder ID.profit_tableStoreId profit
     _loadProfitTable uiBuilder xs
-    return True
     where
         roomNum = show $ Room.roomNumber (room x)
         date    = show $ reservationDate x
@@ -98,5 +97,5 @@ loadProfitTable uiBuilder hotel = do
     Mut.clearTreeView uiBuilder ID.profit_tableStoreId -- before fill tv., clear all tree view store
 
     hotelCopy <- readIORef hotel
-    status <- _loadProfitTable uiBuilder (history hotelCopy)
-    print $ "[LOADED]: profit view loading status = " ++ (show status)
+    _loadProfitTable uiBuilder (history hotelCopy)
+    print $ "[LOADED]: profit view loaded"
