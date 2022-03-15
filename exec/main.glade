@@ -1221,7 +1221,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Состояние и управление комнатами</property>
+                <property name="label" translatable="yes">Заселение и выселение</property>
               </object>
               <packing>
                 <property name="position">1</property>
