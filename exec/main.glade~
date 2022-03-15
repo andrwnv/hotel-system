@@ -27,71 +27,6 @@
         <col id="1" translatable="yes">kbxgh</col>
         <col id="2" translatable="yes">sdfasdf</col>
       </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
     </data>
   </object>
   <object class="GtkListStore" id="profitStore">
@@ -105,14 +40,6 @@
       <!-- column-name gdouble1 -->
       <column type="gdouble"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">Доход</col>
-        <col id="1" translatable="yes">2</col>
-        <col id="2" translatable="yes">06-03-2022</col>
-        <col id="3">500</col>
-      </row>
-    </data>
   </object>
   <object class="GtkTextBuffer" id="textbuffer1"/>
   <object class="GtkDialog">
@@ -943,6 +870,9 @@
                             <property name="rubber-banding">True</property>
                             <property name="enable-grid-lines">both</property>
                             <property name="activate-on-single-click">True</property>
+                            <child internal-child="selection">
+                              <object class="GtkTreeSelection"/>
+                            </child>
                             <child>
                               <object class="GtkTreeViewColumn" id="lastNameCl2">
                                 <property name="title" translatable="yes">Фамилия</property>
@@ -1221,7 +1151,7 @@
               <object class="GtkLabel">
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
-                <property name="label" translatable="yes">Состояние и управление комнатами</property>
+                <property name="label" translatable="yes">Заселение и выселение</property>
               </object>
               <packing>
                 <property name="position">1</property>
