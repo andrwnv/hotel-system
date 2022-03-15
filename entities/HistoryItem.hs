@@ -6,8 +6,8 @@ import Room
 import Data.Time
 
 data HistoryItem = HistoryItem {
+    paymentType     :: String,
     room            :: Room,
-    tenant          :: Tenant,
     totalPrice      :: Double,
     reservationDate :: Day
 } deriving (Show, Read)

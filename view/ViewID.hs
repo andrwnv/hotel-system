@@ -18,3 +18,9 @@ delete_FirstNameFieldID     :: Text = pack "deleteFirstNameField"
 delete_PhoneNumberFieldID   :: Text = pack "deletePhoneNumberField"
 delete_deleteUserBtnId      :: Text = pack "deleteUser"
 
+-- Profit id's
+profit_tableViewId          :: Text = pack "profitTree"
+profit_tableStoreId         :: Text = pack "profitStore"
+profit_sumLabel             :: Text = pack "profitLabel"
+profit_costLabel            :: Text = pack "costLabel"
+profit_totalSumLabel        :: Text = pack "totalProfitLabel"

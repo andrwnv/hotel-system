@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module Rent (selectedDaysBusy) where
+module RentCore (selectedDaysBusy) where
 
 import DayChecks
 

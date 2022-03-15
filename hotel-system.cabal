@@ -35,7 +35,7 @@ library Utils
 
 library Core
   hs-source-dirs:      core
-  exposed-modules:     Rent, UserCore
+  exposed-modules:     RentCore, UserCore
   build-depends:       base >= 4.7 && < 5, time, Entities, Utils
   default-language:    Haskell2010
 

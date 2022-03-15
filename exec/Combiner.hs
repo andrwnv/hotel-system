@@ -1,6 +1,8 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module Combiner where
+module Combiner ( createUserHandler
+                , deleteUserHandler
+                , loadProfitTable ) where
 
 -- Prelude
 import Data.Text (Text, unpack)
@@ -14,18 +16,22 @@ import qualified GI.Gtk as Gtk
 import UserCore
 
 -- Entities
+import qualified Room
+import HistoryItem
 import PersonBase
 import Tenant
 import Hotel
 
 -- View
+import qualified Mutation as Mut
+import qualified ViewID as ID
 import Extractors
-import qualified ViewID as ID 
 
 -- Utils
 import DayChecks
 
 
+-- User control section.
 createUserHandler :: Gtk.Builder -> IORef Hotel -> IO ()
 createUserHandler uiBuilder hotel = do
     phoneNumber     <- extractEntryText uiBuilder (ID.create_PhoneNumberFieldID)
@@ -71,3 +77,26 @@ deleteUserHandler uiBuilder hotel = do
     writeIORef hotel (Hotel _users _rooms _history)
 
     print $ "[DELETE]: New user list -> " ++ show _users
+
+
+-- Profit table section.
+_loadProfitTable :: Gtk.Builder -> [HistoryItem] -> IO (Bool)
+_loadProfitTable _ [] = return True
+_loadProfitTable uiBuilder (x:xs) = do
+    Mut.addRowToProfitView uiBuilder ID.profit_tableStoreId profit
+    _loadProfitTable uiBuilder xs
+    return True
+    where
+        roomNum = show $ Room.roomNumber (room x)
+        date    = show $ reservationDate x
+        _type   = paymentType x
+        sum     = totalPrice x
+        profit  = Mut.ProfitView _type roomNum date sum
+
+loadProfitTable :: Gtk.Builder -> IORef Hotel -> IO()
+loadProfitTable uiBuilder hotel = do
+    Mut.clearTreeView uiBuilder ID.profit_tableStoreId -- before fill tv., clear all tree view store
+
+    hotelCopy <- readIORef hotel
+    status <- _loadProfitTable uiBuilder (history hotelCopy)
+    print $ "[LOADED]: profit view loading status = " ++ (show status)

@@ -18,7 +18,7 @@ import Extractors
 import Connectors
 import Mutation
 import Misc
-import Rent
+import RentCore
 
 import Data.Time.Calendar
 import PersonBase
@@ -29,6 +29,7 @@ import UserCore
 import Hotel
 import Room
 import RoomComfortItem
+import HistoryItem
 
 import Combiner
 
@@ -75,11 +76,15 @@ main = do
   let test = [Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1), Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)]
   let room = Room 1 "123" [RoomComfortItem 12.0 "456" True] 100.29 [] [] []
 
-  hotelGlobalInstance <- newIORef $ Hotel [] [room] []
+  let item = HistoryItem "MasterCard" room 1235.50 (fromGregorian 2022 03 08)
+
+  hotelGlobalInstance <- newIORef $ Hotel [] [room] [item, item, item]
 
   connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
   connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
-  
+
+  loadProfitTable builder hotelGlobalInstance
+
   -- value <- extractSelectedRow_User builder "profitTree"
   -- let t = fromJust value 
   -- print (show (t))

@@ -38,6 +38,11 @@ addRowToProfitView builder listStoreId profit = do
     #setValue store newIter 2 _date
     #setValue store newIter 3 _sum
 
+clearTreeView :: Gtk.Builder -> Text -> IO ()
+clearTreeView builder listStoreId = do
+    Just store <- getBuilderObj builder listStoreId Gtk.ListStore
+    #clear store
+
 addComboBoxItem :: Gtk.Builder -> Text -> Text -> IO ()
 addComboBoxItem builder comboBoxId text = do
     Just comboBox <- getBuilderObj builder comboBoxId Gtk.ComboBoxText
