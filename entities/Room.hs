@@ -11,6 +11,7 @@ data Room = Room {
     roomNumber   :: Int,
     description  :: String,
     comforts     :: [RoomComfortItem],
+    tenantPrice  :: Double,
     dayExpenses  :: Double,
     busyTime     :: [Day],
     busyBy       :: [Tenant],

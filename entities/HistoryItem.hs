@@ -9,5 +9,5 @@ data HistoryItem = HistoryItem {
     paymentType     :: String,
     room            :: Room,
     totalPrice      :: Double,
-    reservationDate :: Day
+    reservationDate :: [Day]
 } deriving (Show, Read)

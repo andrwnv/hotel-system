@@ -30,6 +30,7 @@ import Hotel
 import Room
 import RoomComfortItem
 import HistoryItem
+import HotelCore
 
 import Combiner
 
@@ -74,9 +75,9 @@ main = do
   connectButtonClicked builder name $ do showSelectedColumn builder
 
   let test = [Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1), Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)]
-  let room = Room 1 "123" [RoomComfortItem 12.0 "456" True] 100.29 [] [] []
+  let room = Room 1 "123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] [] []
 
-  let item = HistoryItem "MasterCard" room 1235.50 (fromGregorian 2022 03 08)
+  let item = HistoryItem "MasterCard" room 40000.0 [(fromGregorian 2022 03 01), (fromGregorian 2022 03 08)]
 
   hotelGlobalInstance <- newIORef $ Hotel [] [room] [item, item, item]
 

@@ -5,7 +5,7 @@ module Combiner ( createUserHandler
                 , loadProfitTable ) where
 
 -- Prelude
-import Data.Text (Text, unpack)
+import Data.Text (Text, unpack, pack)
 import Data.IORef
 import Control.Monad
 
@@ -13,6 +13,7 @@ import Control.Monad
 import qualified GI.Gtk as Gtk
 
 -- Core
+import HotelCore
 import UserCore
 
 -- Entities
@@ -98,4 +99,10 @@ loadProfitTable uiBuilder hotel = do
 
     hotelCopy <- readIORef hotel
     _loadProfitTable uiBuilder (history hotelCopy)
+
+    let (profit, cost) = collectProfit (history hotelCopy)
+    Mut.changeLabelText uiBuilder ID.profit_sumLabel (pack $ show profit) 
+    Mut.changeLabelText uiBuilder ID.profit_costLabel (pack $ show cost) 
+    Mut.changeLabelText uiBuilder ID.profit_totalSumLabel (pack $ show (profit - cost)) 
+
     print $ "[LOADED]: profit view loaded"

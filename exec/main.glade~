@@ -1253,7 +1253,7 @@
                         </child>
                         <child>
                           <object class="GtkTreeViewColumn" id="lastNameCl1">
-                            <property name="title" translatable="yes">Тип</property>
+                            <property name="title" translatable="yes">Способ оплаты</property>
                             <property name="expand">True</property>
                             <child>
                               <object class="GtkCellRendererText"/>

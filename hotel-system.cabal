@@ -35,13 +35,14 @@ library Utils
 
 library Core
   hs-source-dirs:      core
-  exposed-modules:     RentCore, UserCore
+  exposed-modules:     RentCore, UserCore, HotelCore
   build-depends:       base >= 4.7 && < 5, time, Entities, Utils
   default-language:    Haskell2010
 
 executable HotelSystem
   hs-source-dirs:      exec
   main-is:             Main.hs
+  other-modules:       Combiner
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5, text, time
                      , Entities
