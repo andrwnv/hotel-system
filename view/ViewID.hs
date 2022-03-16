@@ -28,3 +28,8 @@ profit_totalSumLabel        :: Text = pack "totalProfitLabel"
 -- Room id's
 room_roomComboBoxID         :: Text = pack "roomComboBox"
 room_rentLayoutId           :: Text = pack "rentLayout"
+room_tenantsRentLabel       :: Text = pack "tenantsRentLabel"
+room_rentDaysLabel          :: Text = pack "rentDaysLabel"
+room_rentPricePerDayLabel   :: Text = pack "rentPricePerDayLabel"
+room_rentDescriptionLabel   :: Text = pack "rentDescriptionLabel"
+room_rentCostLabel          :: Text = pack "rentCostLabel"

@@ -1,13 +1,13 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module Combiner ( createUserHandler
-                , deleteUserHandler
+module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
-                , loadRooms ) where
+                , loadRooms, loadRoomInfo ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
 import Data.IORef
+import Data.Maybe
 import Control.Monad
 
 -- Gtk
@@ -134,3 +134,41 @@ loadRooms uiBuilder hotel = do
             print $ "[LOADING]: Hotel doesnt have rooms"
 
     return status
+
+_extractSelectedRoom :: [R.Room] -> Int -> Maybe R.Room
+_extractSelectedRoom [] _ = Nothing
+_extractSelectedRoom (x:xs) num 
+    | roomNum == num = Just x
+    | otherwise = _extractSelectedRoom xs num
+    where
+        roomNum = R.roomNumber x
+
+_getTenantsFullNameString :: [Tenant] -> String
+_getTenantsFullNameString [] = ""
+_getTenantsFullNameString (x:xs) = fullNames
+    where
+        tenantBase = base x
+        fn = PersonBase.firstName tenantBase
+        ln = PersonBase.lastName tenantBase
+        phone = PersonBase.phoneNumer tenantBase
+        fullNames = _getTenantsFullNameString xs ++ fn ++ " " ++ ln ++ " (" ++ phone ++ ")\n"
+
+_fillRoomInfoUI :: Gtk.Builder -> R.Room -> IO ()
+_fillRoomInfoUI uiBuilder room = do
+    Mut.changeLabelText uiBuilder ID.room_tenantsRentLabel $ pack $ _getTenantsFullNameString (R.busyBy room)
+    Mut.changeLabelText uiBuilder ID.room_rentDaysLabel $ pack $ show (R.busyTime room)
+    Mut.changeLabelText uiBuilder ID.room_rentPricePerDayLabel $ pack (show(R.tenantPrice room) ++ " руб.") 
+    Mut.changeLabelText uiBuilder ID.room_rentDescriptionLabel $ pack (R.description room)
+    Mut.changeLabelText uiBuilder ID.room_rentCostLabel $ pack (show(R.dayExpenses room) ++ " руб.") 
+
+loadRoomInfo :: Gtk.Builder -> IORef Hotel -> IO ()
+loadRoomInfo uiBuilder hotel = do
+    hotelCopy <- readIORef hotel
+    Just activeRoom <- extractComboBoxText uiBuilder ID.room_roomComboBoxID
+    case activeRoom of
+        "" -> print "[INFO LOADING]: room info cant be load"
+        _  -> do
+            let index :: Int = read $ unpack activeRoom
+            let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
+            _fillRoomInfoUI uiBuilder room
+            print "[INFO LOADING]: room info loaded"
