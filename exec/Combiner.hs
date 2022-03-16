@@ -2,7 +2,8 @@
 
 module Combiner ( createUserHandler
                 , deleteUserHandler
-                , loadProfitTable ) where
+                , loadProfitTable
+                , loadRooms ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -17,7 +18,7 @@ import HotelCore
 import UserCore
 
 -- Entities
-import qualified Room
+import qualified Room as R
 import HistoryItem
 import PersonBase
 import Tenant
@@ -32,7 +33,7 @@ import Extractors
 import DayChecks
 
 
--- User control section.
+-- User control section
 createUserHandler :: Gtk.Builder -> IORef Hotel -> IO ()
 createUserHandler uiBuilder hotel = do
     phoneNumber     <- extractEntryText uiBuilder (ID.create_PhoneNumberFieldID)
@@ -80,14 +81,14 @@ deleteUserHandler uiBuilder hotel = do
     print $ "[DELETE]: New user list -> " ++ show _users
 
 
--- Profit table section.
+-- Profit table section
 _loadProfitTable :: Gtk.Builder -> [HistoryItem] -> IO ()
 _loadProfitTable _ [] = return ()
 _loadProfitTable uiBuilder (x:xs) = do
     Mut.addRowToProfitView uiBuilder ID.profit_tableStoreId profit
     _loadProfitTable uiBuilder xs
     where
-        roomNum = show $ Room.roomNumber (room x)
+        roomNum = show $ R.roomNumber (room x)
         date    = show $ reservationDate x
         _type   = paymentType x
         sum     = totalPrice x
@@ -105,4 +106,31 @@ loadProfitTable uiBuilder hotel = do
     Mut.changeLabelText uiBuilder ID.profit_costLabel (pack $ show cost) 
     Mut.changeLabelText uiBuilder ID.profit_totalSumLabel (pack $ show (profit - cost)) 
 
-    print $ "[LOADED]: profit view loaded"
+    print $ "[LOADING]: profit view loaded"
+
+
+-- Booking and rent section
+_loadRooms :: Gtk.Builder -> [R.Room] -> IO Bool
+_loadRooms _ [] = return False
+_loadRooms uiBuilder (x:xs) = do
+    let roomNum = (pack $ show (R.roomNumber x))
+    Mut.addComboBoxItem uiBuilder ID.room_roomComboBoxID roomNum
+    prevStatus <- _loadRooms uiBuilder xs
+    let status = True || prevStatus
+    return status
+
+loadRooms :: Gtk.Builder -> IORef Hotel -> IO Bool
+loadRooms uiBuilder hotel = do
+    hotelCopy <- readIORef hotel
+    status <- _loadRooms uiBuilder (rooms hotelCopy)
+
+    case status of
+        True -> do
+            Mut.setSensetiveWidget uiBuilder ID.room_rentLayoutId True
+            Mut.setActiveComboBoxItem uiBuilder ID.room_roomComboBoxID 0
+            print $ "[LOADING]: Room combo box loaded"
+        False -> do 
+            Mut.setSensetiveWidget uiBuilder ID.room_rentLayoutId False
+            print $ "[LOADING]: Hotel doesnt have rooms"
+
+    return status

@@ -76,15 +76,20 @@ main = do
 
   let test = [Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1), Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)]
   let room = Room 1 "123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] [] []
+  let roomt = Room 2 "123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] [] []
 
   let item = HistoryItem "MasterCard" room 40000.0 [(fromGregorian 2022 03 01), (fromGregorian 2022 03 08)]
 
-  hotelGlobalInstance <- newIORef $ Hotel [] [room] [item, item, item]
+  hotelGlobalInstance <- newIORef $ Hotel [] [room, roomt] [item, item, item]
 
   connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
   connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
 
   loadProfitTable builder hotelGlobalInstance
+
+  roomLoadingStatus <- loadRooms builder hotelGlobalInstance
+
+  print $ roomLoadingStatus
 
   -- value <- extractSelectedRow_User builder "profitTree"
   -- let t = fromJust value 

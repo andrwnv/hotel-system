@@ -24,3 +24,7 @@ profit_tableStoreId         :: Text = pack "profitStore"
 profit_sumLabel             :: Text = pack "profitLabel"
 profit_costLabel            :: Text = pack "costLabel"
 profit_totalSumLabel        :: Text = pack "totalProfitLabel"
+
+-- Room id's
+room_roomComboBoxID         :: Text = pack "roomComboBox"
+room_rentLayoutId           :: Text = pack "rentLayout"
