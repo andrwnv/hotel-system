@@ -2,36 +2,27 @@
 {-# OPTIONS_GHC -w #-}
 
 import qualified Data.Text.IO as T
+import Data.IORef
 import Data.Text (Text, pack)
-import Data.Maybe
-import Data.List (sort, concat)
+import Data.Time.Calendar
 import System.Environment (getArgs)
 
-import Data.IORef
 import Control.Monad
 
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
-import DayChecks
+import qualified Extractors
+import qualified Connectors
+import qualified Misc
 
-import Extractors
-import Connectors
-import Mutation
-import Misc
-import RentCore
-
-import Data.Time.Calendar
-import PersonBase
-import Tenant
-
-import UserCore
-
-import Hotel
-import Room
 import RoomComfortItem
 import HistoryItem
+import PersonBase
 import HotelCore
+import Tenant
+import Hotel
+import Room
 
 import Combiner
 
@@ -42,19 +33,6 @@ printQuit t = do
   T.putStrLn $ "Quitting by " <> t <> "."
   Gtk.mainQuit
   return ()
-
-showSelectedColumn :: Gtk.Builder -> IO ()
-showSelectedColumn builder = do
-  -- Getting text from selected item in Gtk.TreeView
-  value <- extractSelectedRow_User builder "tree"
-  let t = fromJust value
-  print (show (t))
-  T.putStrLn $ "Hello from "
-
-
-evictFromDialogCancel :: Gtk.Dialog -> IO ()
-evictFromDialogCancel dialog = do
-  #close dialog
 
 main :: IO ()
 main = do
@@ -72,7 +50,7 @@ main = do
   builder <- new Gtk.Builder []
   #addFromFile builder filename
 
-  Just window <- getBuilderObj builder "window" Gtk.Window
+  Just window <- Misc.getBuilderObj builder "window" Gtk.Window
   on window #destroy $ printQuit "windows close button"
 
   let test = [Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1), Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)]
@@ -93,18 +71,18 @@ main = do
 
   hotelGlobalInstance <- newIORef $ Hotel users [room, roomt, roomt2] [item, item, item]
 
-  connectButtonClicked builder ID.create_createUserBtnId $ createUserHandler builder hotelGlobalInstance
-  connectButtonClicked builder ID.delete_deleteUserBtnId $ deleteUserHandler builder hotelGlobalInstance
+  Connectors.connectButtonClicked builder ID.create_createUserBtnId $ createUserHandler builder hotelGlobalInstance
+  Connectors.connectButtonClicked builder ID.delete_deleteUserBtnId $ deleteUserHandler builder hotelGlobalInstance
   
-  connectButtonClicked builder ID.booking_deleteBtnId $ Combiner.deleteBooking builder hotelGlobalInstance
+  Connectors.connectButtonClicked builder ID.booking_deleteBtnId $ Combiner.deleteBooking builder hotelGlobalInstance
 
-  connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
+  Connectors.connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
 
   -- Evict from room
-  Just evictDialog <- getBuilderObj builder ID.evict_dialogId Gtk.Dialog
-  connectButtonClicked builder ID.users_leaveBtnId $ #show evictDialog
-  connectButtonClicked builder ID.evict_cancelBtnId $ evictFromDialogCancel evictDialog
-  connectButtonClicked builder ID.evict_evictBtnId $ evictDialogHandler builder evictDialog hotelGlobalInstance
+  Just evictDialog <- Misc.getBuilderObj builder ID.evict_dialogId Gtk.Dialog
+  Connectors.connectButtonClicked builder ID.users_leaveBtnId $ #show evictDialog
+  Connectors.connectButtonClicked builder ID.evict_cancelBtnId $ evictFromDialogCancel evictDialog
+  Connectors.connectButtonClicked builder ID.evict_evictBtnId $ evictDialogHandler builder evictDialog hotelGlobalInstance
 
   -- Loading 
   loadProfitTable builder hotelGlobalInstance

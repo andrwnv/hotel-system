@@ -3,7 +3,7 @@
 module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
                 , loadRooms, loadRoomInfo, Combiner.deleteBooking
-                , evictFromCurrentRoom, evictDialogHandler ) where
+                , evictFromCurrentRoom, evictDialogHandler, evictFromDialogCancel ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -267,4 +267,8 @@ evictDialogHandler uiBuilder dialog hotel = do
     evictFromCurrentRoom uiBuilder hotel $ unpack paymentMethod
     loadProfitTable uiBuilder hotel -- Rerender profit tree
 
+    #close dialog
+
+evictFromDialogCancel :: Gtk.Dialog -> IO ()
+evictFromDialogCancel dialog = do
     #close dialog
