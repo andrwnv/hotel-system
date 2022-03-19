@@ -87,12 +87,14 @@ main = do
 
   hotelGlobalInstance <- newIORef $ Hotel users [room, roomt, roomt2] [item, item, item]
 
-  connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
-  connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
-
-  connectButtonClicked builder (ID.booking_deleteBtnId) $ Combiner.deleteBooking builder hotelGlobalInstance
+  connectButtonClicked builder ID.create_createUserBtnId $ createUserHandler builder hotelGlobalInstance
+  connectButtonClicked builder ID.delete_deleteUserBtnId $ deleteUserHandler builder hotelGlobalInstance
+  
+  connectButtonClicked builder ID.booking_deleteBtnId $ Combiner.deleteBooking builder hotelGlobalInstance
+  connectButtonClicked builder ID.users_leaveBtnId $ evictFromCurrentRoom builder hotelGlobalInstance
 
   connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
+
 
   loadProfitTable builder hotelGlobalInstance
   loadRooms builder hotelGlobalInstance

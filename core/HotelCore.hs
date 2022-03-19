@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module HotelCore (collectProfit, replaceRoom) where
+module HotelCore (collectProfit, replaceRoom, evict) where
 
 import Data.Time.Calendar
 import GHC.Float
@@ -39,5 +39,24 @@ replaceRoom hotel newRoom = hotelRes
     where 
         _tenants = tenants hotel
         _rooms = [newRoom] ++ _roomsWithoutSelectedRoom (roomNumber newRoom) (rooms hotel)
+        _history = history hotel
+        hotelRes = Hotel _tenants _rooms _history
+
+_evict :: Room -> Room
+_evict room = updatedRoom
+    where
+        _roomNumber   = roomNumber room
+        _description  = Room.description room
+        _comforts     = comforts room 
+        _tenantPrice  = tenantPrice room
+        _dayExpenses  = dayExpenses room
+        _plannedRents = plannedRents room
+        updatedRoom = Room _roomNumber _description _comforts _tenantPrice _dayExpenses [] [] _plannedRents
+
+evict :: Hotel -> Room -> Hotel
+evict hotel room = hotelRes
+    where
+        _tenants = tenants hotel
+        _rooms = [_evict room] ++ _roomsWithoutSelectedRoom (roomNumber room) (rooms hotel)
         _history = history hotel
         hotelRes = Hotel _tenants _rooms _history

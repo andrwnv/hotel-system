@@ -28,7 +28,7 @@
               </packing>
             </child>
             <child>
-              <object class="GtkButton">
+              <object class="GtkButton" id="evictBtn">
                 <property name="label" translatable="yes">Выселить</property>
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
@@ -1180,7 +1180,7 @@
                       <placeholder/>
                     </child>
                     <child>
-                      <object class="GtkButton">
+                      <object class="GtkButton" id="leaveButton">
                         <property name="label" translatable="yes">Выселить</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
