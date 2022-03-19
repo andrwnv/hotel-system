@@ -89,46 +89,16 @@ main = do
 
   connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
   connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
+  connectButtonClicked builder (ID.booking_deleteBtnId) $ deleteBooking builder hotelGlobalInstance
 
   connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
 
   loadProfitTable builder hotelGlobalInstance
   loadRooms builder hotelGlobalInstance
 
-  -- value <- extractSelectedRow_User builder "profitTree"
-  -- let t = fromJust value 
-  -- print (show (t))
-  
-  -- selectedDate <- extractDate builder "birthDayCal"
- 
-  -- Just txtSelect <- extractComboBoxText builder roomComboBox_ID
-  -- print(show(txtSelect))
-  
-  -- addComboBoxItem builder "roomComboBox" "test123132"
-
-  -- changeLabelText builder "totalProfitLabel" "100000,00 р."
-
-  -- let tenant = Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)
-  -- let person = PersonBase "1234" "123" "123" (fromGregorian 2022 03 08)
-
-  -- print $ isUserExist [tenant] person
-
-  -- let select = [(fromGregorian 2022 03 10), (fromGregorian 2022 03 18)]
-  -- let begin = (fromGregorian 2022 03 11)
-  -- let end = (fromGregorian 2022 03 20)
- 
-  -- let selectBegin = select!!0
-  -- let selectEnd = select!!1
-  -- let rentBegin = begin
-  -- let rentEnd = end
-
   -- let rent = [([tenant], [begin, end]), ([tenant], [(fromGregorian 2022 03 21), (fromGregorian 2022 03 25)])]
-  -- print $ selectedDaysBusy rent select
-
   -- -- writeFile "file.txt" (show test)
   -- contents :: String <- readFile "file.txt"
   -- let arr :: [Tenant] = read contents
-
-  -- print $ show arr
 
   Gtk.main

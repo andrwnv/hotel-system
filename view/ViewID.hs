@@ -36,7 +36,9 @@ room_rentCostLabel          :: Text = pack "rentCostLabel"
 
 -- User id's
 users_tableStoreId          :: Text = pack "userStore"
+users_treeViewId            :: Text = pack "userTree"
 
 -- Booking id's
 booking_tableStoreId        :: Text = pack "bookingStore"
-
+booking_deleteBtnId         :: Text = pack "deleteBookingBtn"
+booking_treeViewId          :: Text = pack "bookingTree"

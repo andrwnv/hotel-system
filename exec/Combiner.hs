@@ -2,7 +2,7 @@
 
 module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
-                , loadRooms, loadRoomInfo ) where
+                , loadRooms, loadRoomInfo, deleteBooking ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -209,3 +209,16 @@ loadRoomInfo uiBuilder hotel = do
             _fillUsersInRoomInfo uiBuilder users room
             _fillBookingInRoomInfo uiBuilder (R.plannedRents room)
             print $ "[INFO LOADING]: room info loaded " ++ show index
+
+
+-- Booking delete
+deleteBooking :: Gtk.Builder -> IORef Hotel -> IO ()
+deleteBooking uiBuilder hotel = do
+    hotelCopy <- readIORef hotel
+    Just activeRoom <- extractComboBoxText uiBuilder ID.room_roomComboBoxID
+    case activeRoom of
+        "" -> print "[ERROR]: rooms not loaded"
+        _  -> do
+            val <- extractSelectedRow_Booking uiBuilder ID.booking_treeViewId
+            print $ show val
+            print $ "[BOOKING DELETE]: success"

@@ -57,6 +57,36 @@ extractSelectedRow_User builder treeViewId = do
 
     return result 
 
+extractSelectedRow_Booking :: Gtk.Builder -> Text -> IO (Maybe BookingView)
+extractSelectedRow_Booking builder treeViewId = do
+    Just treeView <- getBuilderObj builder treeViewId Gtk.TreeView
+    selection :: Gtk.TreeSelection <- #getSelection treeView
+    treeModel :: (Bool, Gtk.TreeModel, Gtk.TreeIter) <- #getSelected selection
+
+    let (selected, model, iter) = treeModel
+    when (not selected) (return ())
+
+    -- extract firstName, secondName & phoneNumber
+    gtkValue :: Gtk.GValue <- #getValue model iter 0
+    value :: (Maybe String) <- fromGValue gtkValue
+    let firstName = fromMaybe "" value
+
+    gtkValue :: Gtk.GValue <- #getValue model iter 1
+    value :: (Maybe String) <- fromGValue gtkValue
+    let lastName = fromMaybe "" value
+
+    gtkValue :: Gtk.GValue <- #getValue model iter 2
+    value :: (Maybe String) <- fromGValue gtkValue
+    let phoneNumber = fromMaybe "" value
+
+    gtkValue :: Gtk.GValue <- #getValue model iter 3
+    value :: (Maybe String) <- fromGValue gtkValue
+    let dates = fromMaybe "" value
+
+    let result = Just (BookingView firstName lastName phoneNumber dates)
+
+    return result 
+
 -- Gtk.Calendar extract user date selection
 extractDate :: Gtk.Builder -> Text -> IO Day
 extractDate builder calendarId = do
