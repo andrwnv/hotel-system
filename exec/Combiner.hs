@@ -36,6 +36,20 @@ import Extractors
 import DayChecks
 
 
+-- Force update user tree
+_forceUpdateUserTree :: Gtk.Builder -> IORef Hotel -> IO ()
+_forceUpdateUserTree uiBuilder hotel = do
+    Just activeRoom <- extractComboBoxText uiBuilder ID.room_roomComboBoxID
+    hotelCopy <- readIORef hotel
+    
+    let index :: Int = read $ unpack activeRoom
+    let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
+    let busyList = R.busyBy room 
+    let users = tenants hotelCopy
+
+    Mut.clearTreeView uiBuilder ID.users_tableStoreId
+    _addUsersToUserTreeView uiBuilder users busyList
+
 -- User control section
 createUserHandler :: Gtk.Builder -> IORef Hotel -> IO ()
 createUserHandler uiBuilder hotel = do
@@ -60,6 +74,9 @@ createUserHandler uiBuilder hotel = do
                     let _history = history hotelCopy
                     writeIORef hotel (Hotel users _rooms _history)
                     print $ "[CREATE]: User -> " ++ show tenantBase
+                    
+                    _forceUpdateUserTree uiBuilder hotel
+
                 False -> print $ "[CREATE]: User already exists -> " ++ show tenantBase
     else print $ "[CREATE]: Invalid user info -> " ++ show tenantBase
 
@@ -80,6 +97,8 @@ deleteUserHandler uiBuilder hotel = do
     let _history = history hotelCopy
 
     writeIORef hotel (Hotel _users _rooms _history)
+    
+    _forceUpdateUserTree uiBuilder hotel
 
     print $ "[DELETE]: New user list -> " ++ show _users
 

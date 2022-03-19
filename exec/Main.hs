@@ -73,7 +73,6 @@ main = do
 
   Connectors.connectButtonClicked builder ID.create_createUserBtnId $ createUserHandler builder hotelGlobalInstance
   Connectors.connectButtonClicked builder ID.delete_deleteUserBtnId $ deleteUserHandler builder hotelGlobalInstance
-  
   Connectors.connectButtonClicked builder ID.booking_deleteBtnId $ Combiner.deleteBooking builder hotelGlobalInstance
 
   Connectors.connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
