@@ -50,4 +50,4 @@ deleteBooking :: PersonBase -> Room -> Room
 deleteBooking personBase room = updatedRoom
     where
         updatedRent = _deleteBooking personBase (plannedRents room)
-        updatedRoom = Room (Room.roomNumber room) (description room) (comforts room) (tenantPrice room) (dayExpenses room) (busyTime room) (busyBy room) updatedRent
+        updatedRoom = Room (Room.roomNumber room) (description room) (tenantPrice room) (dayExpenses room) (busyTime room) (busyBy room) updatedRent

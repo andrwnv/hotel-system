@@ -10,7 +10,6 @@ type Rent = (Tenant, [Day])
 data Room = Room {
     roomNumber   :: Int,
     description  :: String,
-    comforts     :: [RoomComfortItem],
     tenantPrice  :: Double,
     dayExpenses  :: Double,
     busyTime     :: [Day],
