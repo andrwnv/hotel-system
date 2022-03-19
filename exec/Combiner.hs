@@ -3,7 +3,7 @@
 module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
                 , loadRooms, loadRoomInfo, Combiner.deleteBooking
-                , evictFromCurrentRoom ) where
+                , evictFromCurrentRoom, evictDialogHandler ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -240,12 +240,11 @@ deleteBooking uiBuilder hotel = do
                     let updateRoom = RentCore.deleteBooking selectedUser room
                     writeIORef hotel $ replaceRoom hotelCopy updateRoom
 
-                    -- Update table
-                    _fillBookingInRoomInfo uiBuilder (R.plannedRents updateRoom)
+                    _fillBookingInRoomInfo uiBuilder (R.plannedRents updateRoom) -- Rerender booking tree
                     print $ "[BOOKING DELETE]: success"
 
-evictFromCurrentRoom :: Gtk.Builder -> IORef Hotel -> IO ()
-evictFromCurrentRoom uiBuilder hotel = do
+evictFromCurrentRoom :: Gtk.Builder -> IORef Hotel -> String -> IO ()
+evictFromCurrentRoom uiBuilder hotel payment = do
     hotelCopy <- readIORef hotel
     Just activeRoom <- extractComboBoxText uiBuilder ID.room_roomComboBoxID
 
@@ -255,8 +254,17 @@ evictFromCurrentRoom uiBuilder hotel = do
             let index :: Int = read $ unpack activeRoom
             let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
             
-            writeIORef hotel $ evict hotelCopy room
+            writeIORef hotel $ evict hotelCopy room payment
 
             loadRoomInfo uiBuilder hotel
             print "[ROOM EVICT]: success"
 
+evictDialogHandler :: Gtk.Builder -> Gtk.Dialog -> IORef Hotel -> IO ()
+evictDialogHandler uiBuilder dialog hotel = do
+    paymentMethodMonad <- extractComboBoxText uiBuilder ID.evict_paymentSelectorId
+    let paymentMethod = fromJust paymentMethodMonad
+    
+    evictFromCurrentRoom uiBuilder hotel $ unpack paymentMethod
+    loadProfitTable uiBuilder hotel -- Rerender profit tree
+
+    #close dialog

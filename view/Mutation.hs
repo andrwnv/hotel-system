@@ -52,7 +52,7 @@ addRowToBookingView builder listStoreId booking = do
     _lastName <- toGValue $ Just $ lastName booking
     _phoneNum <- toGValue $ Just $ phoneNumber_ booking
     _dates <- toGValue $ Just $ dates booking
-    print $ show booking
+
     newIter :: Gtk.TreeIter <- #append store
     #setValue store newIter 0 _lastName
     #setValue store newIter 1 _firstName

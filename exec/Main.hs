@@ -51,6 +51,11 @@ showSelectedColumn builder = do
   print (show (t))
   T.putStrLn $ "Hello from "
 
+
+evictFromDialogCancel :: Gtk.Dialog -> IO ()
+evictFromDialogCancel dialog = do
+  #close dialog
+
 main :: IO ()
 main = do
   args <- getArgs
@@ -71,8 +76,8 @@ main = do
   on window #destroy $ printQuit "windows close button"
 
   let test = [Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1), Tenant (PersonBase "123" "123" "123" (fromGregorian 2022 03 08)) "" (-1)]
-  let room = Room 1 "123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] test []
-  let roomt = Room 2 "123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] test []
+  let room = Room 1 "123" 5000.0 100.29 [] test []
+  let roomt = Room 2 "123" 5000.0 100.29 [] test []
 
   let item = HistoryItem "MasterCard" room 40000.0 [(fromGregorian 2022 03 01), (fromGregorian 2022 03 08)]
 
@@ -83,7 +88,8 @@ main = do
   let room3Users = [Tenant (PersonBase "QWerty" "Petr" "89521325969"  (fromGregorian 2022 03 08)) "" 3]
   let testRent = ((Tenant (PersonBase "QWerty" "Petrov" "89521325969"  (fromGregorian 2022 03 08)) "" (-1)), [(fromGregorian 2022 03 20), (fromGregorian 2022 03 30)])
 
-  let roomt2 = Room 3 "qwerty123123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] room3Users [testRent]
+  let datesPair = [(fromGregorian 2022 03 01), (fromGregorian 2022 03 07)]
+  let roomt2 = Room 3 "qwerty123123" 5000.0 100.29 datesPair room3Users [testRent]
 
   hotelGlobalInstance <- newIORef $ Hotel users [room, roomt, roomt2] [item, item, item]
 
@@ -91,11 +97,16 @@ main = do
   connectButtonClicked builder ID.delete_deleteUserBtnId $ deleteUserHandler builder hotelGlobalInstance
   
   connectButtonClicked builder ID.booking_deleteBtnId $ Combiner.deleteBooking builder hotelGlobalInstance
-  connectButtonClicked builder ID.users_leaveBtnId $ evictFromCurrentRoom builder hotelGlobalInstance
 
   connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
 
+  -- Evict from room
+  Just evictDialog <- getBuilderObj builder ID.evict_dialogId Gtk.Dialog
+  connectButtonClicked builder ID.users_leaveBtnId $ #show evictDialog
+  connectButtonClicked builder ID.evict_cancelBtnId $ evictFromDialogCancel evictDialog
+  connectButtonClicked builder ID.evict_evictBtnId $ evictDialogHandler builder evictDialog hotelGlobalInstance
 
+  -- Loading 
   loadProfitTable builder hotelGlobalInstance
   loadRooms builder hotelGlobalInstance
 

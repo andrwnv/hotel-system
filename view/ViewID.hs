@@ -43,3 +43,9 @@ users_leaveBtnId            :: Text = pack "leaveButton"
 booking_tableStoreId        :: Text = pack "bookingStore"
 booking_deleteBtnId         :: Text = pack "deleteBookingBtn"
 booking_treeViewId          :: Text = pack "bookingTree"
+
+-- Evict dialog window
+evict_dialogId              :: Text = pack "evictWindow"
+evict_cancelBtnId           :: Text = pack "cancelEvictBtn"
+evict_paymentSelectorId     :: Text = pack "paymentSelector"
+evict_evictBtnId            :: Text = pack "evictBtn"
