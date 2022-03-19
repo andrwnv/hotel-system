@@ -25,6 +25,7 @@ import Tenant
 import Hotel
 
 -- View
+import qualified Misc as MiscView
 import qualified Mutation as Mut
 import qualified ViewID as ID
 import Extractors
@@ -92,9 +93,9 @@ _loadProfitTable uiBuilder (x:xs) = do
         date    = show $ reservationDate x
         _type   = paymentType x
         sum     = totalPrice x
-        profit  = Mut.ProfitView _type roomNum date sum
+        profit  = MiscView.ProfitView _type roomNum date sum
 
-loadProfitTable :: Gtk.Builder -> IORef Hotel -> IO()
+loadProfitTable :: Gtk.Builder -> IORef Hotel -> IO ()
 loadProfitTable uiBuilder hotel = do
     Mut.clearTreeView uiBuilder ID.profit_tableStoreId -- before fill tv., clear all tree view store
 
@@ -161,6 +162,25 @@ _fillRoomInfoUI uiBuilder room = do
     Mut.changeLabelText uiBuilder ID.room_rentDescriptionLabel $ pack (R.description room)
     Mut.changeLabelText uiBuilder ID.room_rentCostLabel $ pack (show(R.dayExpenses room) ++ " руб.") 
 
+
+_showUserList :: Gtk.Builder -> [Tenant] -> [Tenant] -> IO ()
+_showUserList _ [] _ = return ()
+_showUserList uiBuilder (x:xs) busyUsers
+    | userRoomNumer == (-1) = do 
+        Mut.addRowToUserView uiBuilder ID.users_tableStoreId view
+        _showUserList uiBuilder xs busyUsers
+    | otherwise = _showUserList uiBuilder xs busyUsers
+    where 
+        xBase = base x
+        view = MiscView.UserView (firstName xBase) (lastName xBase) (phoneNumer xBase)
+        userRoomNumer = roomNumber x
+
+_fillUsersInRoomInfo :: Gtk.Builder -> [Tenant] -> R.Room -> IO ()
+_fillUsersInRoomInfo uiBuilder users room = do
+    Mut.clearTreeView uiBuilder ID.users_tableStoreId
+    let busyList = R.busyBy room 
+    _showUserList uiBuilder users busyList
+
 loadRoomInfo :: Gtk.Builder -> IORef Hotel -> IO ()
 loadRoomInfo uiBuilder hotel = do
     hotelCopy <- readIORef hotel
@@ -170,5 +190,8 @@ loadRoomInfo uiBuilder hotel = do
         _  -> do
             let index :: Int = read $ unpack activeRoom
             let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
+            let users = tenants hotelCopy
             _fillRoomInfoUI uiBuilder room
-            print "[INFO LOADING]: room info loaded"
+            _fillUsersInRoomInfo uiBuilder users room
+            print $ users
+            print $ "[INFO LOADING]: room info loaded " ++ show index

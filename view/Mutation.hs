@@ -16,14 +16,6 @@ import Data.GI.Base
 import Misc
 
 
-data ProfitView = ProfitView {
-    profitType   :: String,
-    roomNumber   :: String,
-    date         :: String,
-    summ         :: Double
-} deriving (Show)
-
-
 addRowToProfitView :: Gtk.Builder -> Text -> ProfitView -> IO ()
 addRowToProfitView builder listStoreId profit = do
     Just store <- getBuilderObj builder listStoreId Gtk.ListStore
@@ -38,6 +30,34 @@ addRowToProfitView builder listStoreId profit = do
     #setValue store newIter 1 _roomNumber
     #setValue store newIter 2 _date
     #setValue store newIter 3 _sum
+
+addRowToUserView :: Gtk.Builder -> Text -> UserView -> IO ()
+addRowToUserView builder listStoreId user = do
+    Just store <- getBuilderObj builder listStoreId Gtk.ListStore
+
+    _firstName <- toGValue $ Just $ firstName user
+    _lastName <- toGValue $ Just $ secondName user
+    _phoneNum <- toGValue $ Just $ phoneNumer user
+
+    newIter :: Gtk.TreeIter <- #append store
+    #setValue store newIter 0 _firstName
+    #setValue store newIter 1 _lastName
+    #setValue store newIter 2 _phoneNum
+
+addRowToBookingView :: Gtk.Builder -> Text -> BookingView -> IO ()
+addRowToBookingView builder listStoreId booking = do
+    Just store <- getBuilderObj builder listStoreId Gtk.ListStore
+
+    _firstName <- toGValue $ Just $ firstName_ booking
+    _lastName <- toGValue $ Just $ lastName booking
+    _phoneNum <- toGValue $ Just $ phoneNumber_ booking
+    _dates <- toGValue $ Just $ dates booking
+
+    newIter :: Gtk.TreeIter <- #append store
+    #setValue store newIter 0 _firstName
+    #setValue store newIter 1 _lastName
+    #setValue store newIter 2 _phoneNum
+    #setValue store newIter 2 _dates
 
 clearTreeView :: Gtk.Builder -> Text -> IO ()
 clearTreeView builder listStoreId = do

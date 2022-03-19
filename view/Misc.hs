@@ -8,6 +8,25 @@ import Data.Text (Text)
 import qualified GI.Gtk as Gtk
 import Data.GI.Base
 
+data UserView = UserView {
+    firstName   :: String,
+    secondName  :: String,
+    phoneNumer  :: String
+} deriving (Show)
+
+data ProfitView = ProfitView {
+    profitType   :: String,
+    roomNumber   :: String,
+    date         :: String,
+    summ         :: Double
+} deriving (Show)
+
+data BookingView = BookingView {
+    firstName_   :: String,
+    lastName     :: String,
+    phoneNumber_ :: String,
+    dates        :: String 
+}
 
 getBuilderObj :: forall o'
                . GObject o' 

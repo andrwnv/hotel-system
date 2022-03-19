@@ -13,6 +13,7 @@ _isSameDates pair1 pair2 = result
     where
         result = pair1!!0 == pair2!!0 && pair1!!1 == pair2!!1
 
+
 selectedDaysBusy :: [Rent] -> [Day] -> Bool
 selectedDaysBusy [] _ = False
 selectedDaysBusy (x:xs) selectedDays 

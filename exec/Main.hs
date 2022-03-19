@@ -36,6 +36,7 @@ import Combiner
 
 import qualified ViewID as ID
 
+
 printQuit :: Text -> IO ()
 printQuit t = do
   T.putStrLn $ "Quitting by " <> t <> "."
@@ -78,19 +79,22 @@ main = do
 
   let item = HistoryItem "MasterCard" room 40000.0 [(fromGregorian 2022 03 01), (fromGregorian 2022 03 08)]
 
-  hotelGlobalInstance <- newIORef $ Hotel [] [room, roomt] [item, item, item]
+  let users = [Tenant (PersonBase "Glazunov" "Andrew" "89521515969" (fromGregorian 2022 03 08)) "" (-1), 
+              Tenant (PersonBase "QWerty" "Petr" "89521325969"  (fromGregorian 2022 03 08)) "" 3,
+              Tenant (PersonBase "QWerty123" "Petr" "89521325967"  (fromGregorian 2022 03 08)) "" (-1)]
+
+  let room3Users = [Tenant (PersonBase "QWerty" "Petr" "89521325969"  (fromGregorian 2022 03 08)) "" 3]
+  let roomt2 = Room 3 "qwerty123123" [RoomComfortItem 100.0 "456" True] 5000.0 100.29 [] room3Users []
+
+  hotelGlobalInstance <- newIORef $ Hotel users [room, roomt, roomt2] [item, item, item]
 
   connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
   connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
-  
+
   connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
 
   loadProfitTable builder hotelGlobalInstance
-
-  roomLoadingStatus <- loadRooms builder hotelGlobalInstance
-
-  print $ roomLoadingStatus
-
+  loadRooms builder hotelGlobalInstance
 
   -- value <- extractSelectedRow_User builder "profitTree"
   -- let t = fromJust value 

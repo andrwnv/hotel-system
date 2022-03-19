@@ -22,13 +22,6 @@ import Data.GI.Base
 import Misc
 
 
-data UserView = UserView {
-    firstName   :: String,
-    secondName  :: String,
-    phoneNumer  :: String
-} deriving (Show)
-
-
 -- Gtk.Entry extract user input
 extractEntryText :: Gtk.Builder -> Text -> IO Text
 extractEntryText builder entryId = do

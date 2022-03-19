@@ -33,3 +33,10 @@ room_rentDaysLabel          :: Text = pack "rentDaysLabel"
 room_rentPricePerDayLabel   :: Text = pack "rentPricePerDayLabel"
 room_rentDescriptionLabel   :: Text = pack "rentDescriptionLabel"
 room_rentCostLabel          :: Text = pack "rentCostLabel"
+
+-- User id's
+users_tableStoreId          :: Text = pack "userStore"
+
+-- Booking id's
+booking_tableStoreId        :: Text = pack "bookingStore"
+

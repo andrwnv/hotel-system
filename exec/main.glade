@@ -8,26 +8,11 @@
       <column type="gchararray"/>
       <!-- column-name firstNameCl_ -->
       <column type="gchararray"/>
+      <!-- column-name phoneNumberCl_ -->
+      <column type="gchararray"/>
       <!-- column-name bookingDatesCl_ -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">123</col>
-        <col id="1" translatable="yes">123</col>
-        <col id="2" translatable="yes">123123123</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">qwe</col>
-        <col id="1" translatable="yes">123</col>
-        <col id="2" translatable="yes">asdf</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">123123123qwe</col>
-        <col id="1" translatable="yes">kbxgh</col>
-        <col id="2" translatable="yes">sdfasdf</col>
-      </row>
-    </data>
   </object>
   <object class="GtkListStore" id="profitStore">
     <columns>
@@ -98,23 +83,6 @@
       <!-- column-name phoneNumberCl_ -->
       <column type="gchararray"/>
     </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">123</col>
-        <col id="1" translatable="yes">123</col>
-        <col id="2" translatable="yes">123123123</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">qwe</col>
-        <col id="1" translatable="yes">123</col>
-        <col id="2" translatable="yes">asdf</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">123123123qwe</col>
-        <col id="1" translatable="yes">kbxgh</col>
-        <col id="2" translatable="yes">sdfasdf</col>
-      </row>
-    </data>
   </object>
   <object class="GtkWindow" id="window">
     <property name="visible">True</property>
@@ -586,6 +554,7 @@
                   <object class="GtkBox">
                     <property name="visible">True</property>
                     <property name="can-focus">False</property>
+                    <property name="margin-top">10</property>
                     <child>
                       <object class="GtkLabel">
                         <property name="visible">True</property>
@@ -853,8 +822,13 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
+                        <property name="margin-top">25</property>
+                        <property name="margin-bottom">8</property>
                         <property name="xpad">60</property>
                         <property name="label" translatable="yes">Брони</property>
+                        <attributes>
+                          <attribute name="underline" value="True"/>
+                        </attributes>
                       </object>
                       <packing>
                         <property name="expand">False</property>
@@ -863,29 +837,12 @@
                       </packing>
                     </child>
                     <child>
-                      <object class="GtkBox">
-                        <property name="visible">True</property>
-                        <property name="can-focus">False</property>
-                        <child>
-                          <placeholder/>
-                        </child>
-                        <child>
-                          <placeholder/>
-                        </child>
-                      </object>
-                      <packing>
-                        <property name="expand">False</property>
-                        <property name="fill">True</property>
-                        <property name="position">1</property>
-                      </packing>
-                    </child>
-                    <child>
                       <object class="GtkScrolledWindow">
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="shadow-type">in</property>
                         <child>
-                          <object class="GtkTreeView" id="tree1">
+                          <object class="GtkTreeView" id="bookingTree">
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
                             <property name="model">bookingStore</property>
@@ -924,6 +881,15 @@
                             </child>
                             <child>
                               <object class="GtkTreeViewColumn" id="phoneNumberCl2">
+                                <property name="title" translatable="yes">Номер телефона</property>
+                                <property name="expand">True</property>
+                                <child>
+                                  <object class="GtkCellRendererText"/>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="GtkTreeViewColumn" id="bookingCl2">
                                 <property name="title" translatable="yes">Дата брони</property>
                                 <property name="expand">True</property>
                                 <child>
@@ -940,6 +906,34 @@
                       <packing>
                         <property name="expand">True</property>
                         <property name="fill">True</property>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkBox">
+                        <property name="visible">True</property>
+                        <property name="can-focus">False</property>
+                        <child>
+                          <placeholder/>
+                        </child>
+                        <child>
+                          <object class="GtkButton">
+                            <property name="label" translatable="yes">Удалить бронь</property>
+                            <property name="visible">True</property>
+                            <property name="can-focus">True</property>
+                            <property name="receives-default">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">True</property>
+                            <property name="pack-type">end</property>
+                            <property name="position">1</property>
+                          </packing>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
                         <property name="position">2</property>
                       </packing>
                     </child>
@@ -947,7 +941,9 @@
                       <object class="GtkLabel">
                         <property name="visible">True</property>
                         <property name="can-focus">False</property>
-                        <property name="label" translatable="yes">Заселить</property>
+                        <property name="margin-top">25</property>
+                        <property name="margin-bottom">8</property>
+                        <property name="label" translatable="yes">Заселить или создать бронь</property>
                         <attributes>
                           <attribute name="underline" value="True"/>
                         </attributes>
@@ -988,7 +984,7 @@
                                 <property name="vexpand">True</property>
                                 <property name="shadow-type">in</property>
                                 <child>
-                                  <object class="GtkTreeView" id="tree">
+                                  <object class="GtkTreeView" id="userTree">
                                     <property name="visible">True</property>
                                     <property name="can-focus">True</property>
                                     <property name="model">userStore</property>
@@ -1366,57 +1362,5 @@
         </child>
       </object>
     </child>
-  </object>
-  <object class="GtkListStore" id="userStoreBooking">
-    <columns>
-      <!-- column-name lastNameCl_ -->
-      <column type="gchararray"/>
-      <!-- column-name firstNameCl_ -->
-      <column type="gchararray"/>
-      <!-- column-name phoneNumberCl_ -->
-      <column type="gchararray"/>
-    </columns>
-    <data>
-      <row>
-        <col id="0" translatable="yes">123</col>
-        <col id="1" translatable="yes">123</col>
-        <col id="2" translatable="yes">123123123</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">qwe</col>
-        <col id="1" translatable="yes">123</col>
-        <col id="2" translatable="yes">asdf</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes">123123123qwe</col>
-        <col id="1" translatable="yes">kbxgh</col>
-        <col id="2" translatable="yes">sdfasdf</col>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-      <row>
-        <col id="0" translatable="yes"/>
-        <col id="1" translatable="yes"/>
-        <col id="2" translatable="yes"/>
-      </row>
-    </data>
   </object>
 </interface>
