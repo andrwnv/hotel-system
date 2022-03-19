@@ -47,16 +47,26 @@ _evict room = updatedRoom
     where
         _roomNumber   = roomNumber room
         _description  = Room.description room
-        _comforts     = comforts room 
         _tenantPrice  = tenantPrice room
         _dayExpenses  = dayExpenses room
         _plannedRents = plannedRents room
-        updatedRoom = Room _roomNumber _description _comforts _tenantPrice _dayExpenses [] [] _plannedRents
+        updatedRoom = Room _roomNumber _description _tenantPrice _dayExpenses [] [] _plannedRents
 
-evict :: Hotel -> Room -> Hotel
-evict hotel room = hotelRes
+_calculateTotalPrice :: Room -> Double
+_calculateTotalPrice room = totalPrice
+    where 
+        dates = busyTime room
+        price = tenantPrice room
+        datesRange = fromIntegral $ ((diffDays (dates!!1) (dates!!0)) + 1)
+        totalPrice = price * datesRange
+
+evict :: Hotel -> Room -> String -> Hotel
+evict hotel room paymentMethod = hotelRes
     where
+        totalPrice = _calculateTotalPrice room
+        dates = busyTime room
+        newHistoryItem = HistoryItem paymentMethod room totalPrice dates
         _tenants = tenants hotel
         _rooms = [_evict room] ++ _roomsWithoutSelectedRoom (roomNumber room) (rooms hotel)
-        _history = history hotel
+        _history = [newHistoryItem] ++ history hotel
         hotelRes = Hotel _tenants _rooms _history
