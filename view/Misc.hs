@@ -26,7 +26,7 @@ data BookingView = BookingView {
     lastName     :: String,
     phoneNumber_ :: String,
     dates        :: String 
-}
+} deriving (Show)
 
 getBuilderObj :: forall o'
                . GObject o' 

@@ -1363,14 +1363,4 @@
       </object>
     </child>
   </object>
-  <object class="GtkListStore" id="userStoreBooking">
-    <columns>
-      <!-- column-name lastNameCl_ -->
-      <column type="gchararray"/>
-      <!-- column-name firstNameCl_ -->
-      <column type="gchararray"/>
-      <!-- column-name phoneNumberCl_ -->
-      <column type="gchararray"/>
-    </columns>
-  </object>
 </interface>

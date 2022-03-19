@@ -163,13 +163,13 @@ _fillRoomInfoUI uiBuilder room = do
     Mut.changeLabelText uiBuilder ID.room_rentCostLabel $ pack (show(R.dayExpenses room) ++ " руб.") 
 
 
-_showUserList :: Gtk.Builder -> [Tenant] -> [Tenant] -> IO ()
-_showUserList _ [] _ = return ()
-_showUserList uiBuilder (x:xs) busyUsers
+_addUsersToUserTreeView :: Gtk.Builder -> [Tenant] -> [Tenant] -> IO ()
+_addUsersToUserTreeView _ [] _ = return ()
+_addUsersToUserTreeView uiBuilder (x:xs) busyUsers
     | userRoomNumer == (-1) = do 
         Mut.addRowToUserView uiBuilder ID.users_tableStoreId view
-        _showUserList uiBuilder xs busyUsers
-    | otherwise = _showUserList uiBuilder xs busyUsers
+        _addUsersToUserTreeView uiBuilder xs busyUsers
+    | otherwise = _addUsersToUserTreeView uiBuilder xs busyUsers
     where 
         xBase = base x
         view = MiscView.UserView (firstName xBase) (lastName xBase) (phoneNumer xBase)
@@ -179,7 +179,21 @@ _fillUsersInRoomInfo :: Gtk.Builder -> [Tenant] -> R.Room -> IO ()
 _fillUsersInRoomInfo uiBuilder users room = do
     Mut.clearTreeView uiBuilder ID.users_tableStoreId
     let busyList = R.busyBy room 
-    _showUserList uiBuilder users busyList
+    _addUsersToUserTreeView uiBuilder users busyList
+
+_addBookingToBookingTreeView ::  Gtk.Builder -> [R.Rent] -> IO ()
+_addBookingToBookingTreeView _ [] = return ()
+_addBookingToBookingTreeView uiBuilder (x:xs) = do
+    let tenantInfo = base $ fst x
+    let bookingDate = snd x
+    let bookingView = MiscView.BookingView (firstName tenantInfo) (lastName tenantInfo) (phoneNumer tenantInfo) (show bookingDate)
+    Mut.addRowToBookingView uiBuilder ID.booking_tableStoreId bookingView
+
+_fillBookingInRoomInfo :: Gtk.Builder -> [R.Rent] -> IO ()
+_fillBookingInRoomInfo uiBuilder rentList = do
+    Mut.clearTreeView uiBuilder ID.booking_tableStoreId
+    _addBookingToBookingTreeView uiBuilder rentList
+
 
 loadRoomInfo :: Gtk.Builder -> IORef Hotel -> IO ()
 loadRoomInfo uiBuilder hotel = do
@@ -193,5 +207,5 @@ loadRoomInfo uiBuilder hotel = do
             let users = tenants hotelCopy
             _fillRoomInfoUI uiBuilder room
             _fillUsersInRoomInfo uiBuilder users room
-            print $ users
+            _fillBookingInRoomInfo uiBuilder (R.plannedRents room)
             print $ "[INFO LOADING]: room info loaded " ++ show index

@@ -885,6 +885,9 @@
                                 <property name="expand">True</property>
                                 <child>
                                   <object class="GtkCellRendererText"/>
+                                  <attributes>
+                                    <attribute name="text">2</attribute>
+                                  </attributes>
                                 </child>
                               </object>
                             </child>
@@ -895,7 +898,7 @@
                                 <child>
                                   <object class="GtkCellRendererText"/>
                                   <attributes>
-                                    <attribute name="text">2</attribute>
+                                    <attribute name="text">3</attribute>
                                   </attributes>
                                 </child>
                               </object>

@@ -5,7 +5,7 @@ import Tenant
 
 import Data.Time
 
-type Rent = ([Tenant], [Day]) 
+type Rent = (Tenant, [Day]) 
 
 data Room = Room {
     roomNumber   :: Int,
