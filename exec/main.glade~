@@ -967,7 +967,7 @@
                           <placeholder/>
                         </child>
                         <child>
-                          <object class="GtkButton" id="deleteBooking">
+                          <object class="GtkButton" id="deleteBookingBtn">
                             <property name="label" translatable="yes">Удалить бронь</property>
                             <property name="visible">True</property>
                             <property name="can-focus">True</property>
@@ -1165,7 +1165,7 @@
                     </child>
                     <child>
                       <object class="GtkButton" id="rent">
-                        <property name="label" translatable="yes">Заселить</property>
+                        <property name="label" translatable="yes">Создать запись</property>
                         <property name="visible">True</property>
                         <property name="can-focus">True</property>
                         <property name="receives-default">True</property>

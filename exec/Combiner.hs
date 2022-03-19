@@ -2,7 +2,7 @@
 
 module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
-                , loadRooms, loadRoomInfo, deleteBooking ) where
+                , loadRooms, loadRoomInfo, Combiner.deleteBooking ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -16,6 +16,7 @@ import qualified GI.Gtk as Gtk
 -- Core
 import HotelCore
 import UserCore
+import RentCore
 
 -- Entities
 import qualified Room as R
@@ -219,6 +220,25 @@ deleteBooking uiBuilder hotel = do
     case activeRoom of
         "" -> print "[ERROR]: rooms not loaded"
         _  -> do
-            val <- extractSelectedRow_Booking uiBuilder ID.booking_treeViewId
-            print $ show val
-            print $ "[BOOKING DELETE]: success"
+            let index :: Int = read $ unpack activeRoom
+            let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
+            selectedBooking <- extractSelectedRow_Booking uiBuilder ID.booking_treeViewId
+            
+            let booking = fromJust selectedBooking
+            let fn = (MiscView.firstName_ booking) 
+            let ln = (MiscView.lastName booking) 
+            let pn = (MiscView.phoneNumber_ booking)
+            let isValidSelection = fn /= "" || ln /= "" || pn /= ""
+
+            case isValidSelection of
+                False -> print $ "[BOOKING DELETE]: no one selection"
+                _ -> do
+                    date <- now
+                    let selectedUser = (PersonBase fn ln pn date)
+                    let updateRoom = RentCore.deleteBooking selectedUser room
+                    writeIORef hotel $ replaceRoom hotelCopy updateRoom
+
+                    -- Update table
+                    _fillBookingInRoomInfo uiBuilder (R.plannedRents updateRoom)
+                    print $ "[BOOKING DELETE]: success"
+

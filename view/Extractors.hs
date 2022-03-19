@@ -83,7 +83,7 @@ extractSelectedRow_Booking builder treeViewId = do
     value :: (Maybe String) <- fromGValue gtkValue
     let dates = fromMaybe "" value
 
-    let result = Just (BookingView firstName lastName phoneNumber dates)
+    let result = Just (BookingView lastName firstName phoneNumber dates)
 
     return result 
 

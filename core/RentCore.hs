@@ -1,12 +1,15 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module RentCore (selectedDaysBusy) where
+module RentCore (selectedDaysBusy, deleteBooking) where
+
+import Data.Time
+
+import PersonBase
+import Tenant
+import Room
 
 import DayChecks
 
-import Tenant
-import Room
-import Data.Time
 
 _isSameDates :: [Day] -> [Day] -> Bool
 _isSameDates pair1 pair2 = result
@@ -31,3 +34,20 @@ selectedDaysBusy (x:xs) selectedDays
 -- rent selectedRoom tenants selectedDays = 
 --     isCorrectDays <- isCorrectDatePair selectedDays
 --     return selectedRoom
+
+_deleteBooking :: PersonBase -> [Rent] -> [Rent]
+_deleteBooking _ [] = []
+_deleteBooking personBase (x:xs)
+    | isBookingForDelete = _deleteBooking personBase xs
+    | otherwise = [x] ++ _deleteBooking personBase xs
+    where
+        userBase = base $ fst x
+        isBookingForDelete = (firstName userBase) == (firstName personBase) 
+                            && (lastName userBase) == (lastName personBase) 
+                            && (phoneNumer userBase) == (phoneNumer personBase)
+
+deleteBooking :: PersonBase -> Room -> Room
+deleteBooking personBase room = updatedRoom
+    where
+        updatedRent = _deleteBooking personBase (plannedRents room)
+        updatedRoom = Room (Room.roomNumber room) (description room) (comforts room) (tenantPrice room) (dayExpenses room) (busyTime room) (busyBy room) updatedRent

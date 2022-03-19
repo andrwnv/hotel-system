@@ -1,4 +1,5 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
+{-# OPTIONS_GHC -w #-}
 
 import qualified Data.Text.IO as T
 import Data.Text (Text, pack)
@@ -35,7 +36,6 @@ import HotelCore
 import Combiner
 
 import qualified ViewID as ID
-
 
 printQuit :: Text -> IO ()
 printQuit t = do
@@ -89,7 +89,8 @@ main = do
 
   connectButtonClicked builder (ID.create_createUserBtnId) $ createUserHandler builder hotelGlobalInstance
   connectButtonClicked builder (ID.delete_deleteUserBtnId) $ deleteUserHandler builder hotelGlobalInstance
-  connectButtonClicked builder (ID.booking_deleteBtnId) $ deleteBooking builder hotelGlobalInstance
+
+  connectButtonClicked builder (ID.booking_deleteBtnId) $ Combiner.deleteBooking builder hotelGlobalInstance
 
   connectComboBoxTextSelect builder ID.room_roomComboBoxID (loadRoomInfo builder hotelGlobalInstance)
 
