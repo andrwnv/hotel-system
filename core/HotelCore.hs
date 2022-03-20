@@ -5,16 +5,9 @@ module HotelCore (collectProfit, replaceRoom, evict) where
 import Data.Time.Calendar
 import GHC.Float
 
-import RoomComfortItem
 import HistoryItem
 import Hotel
 import Room
-
-_roomComfortProfit :: [RoomComfortItem] -> Double
-_roomComfortProfit [] = 0.0
-_roomComfortProfit (x:xs) = comfortPrice + _roomComfortProfit xs
-    where
-        comfortPrice = price x
 
 collectProfit :: [HistoryItem] -> (Double, Double)
 collectProfit [] = (0.0, 0.0)

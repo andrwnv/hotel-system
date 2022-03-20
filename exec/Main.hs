@@ -16,7 +16,6 @@ import qualified Extractors
 import qualified Connectors
 import qualified Misc
 
-import RoomComfortItem
 import HistoryItem
 import PersonBase
 import HotelCore

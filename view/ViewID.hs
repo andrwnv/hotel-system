@@ -49,3 +49,6 @@ evict_dialogId              :: Text = pack "evictWindow"
 evict_cancelBtnId           :: Text = pack "cancelEvictBtn"
 evict_paymentSelectorId     :: Text = pack "paymentSelector"
 evict_evictBtnId            :: Text = pack "evictBtn"
+
+-- Rent id's
+rent_userMoveInBtnId        :: Text = pack "userMoveInBtn"

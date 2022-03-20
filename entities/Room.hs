@@ -1,6 +1,5 @@
 module Room where
 
-import RoomComfortItem
 import Tenant
 
 import Data.Time

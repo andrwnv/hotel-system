@@ -1083,7 +1083,17 @@
                       </packing>
                     </child>
                     <child>
-                      <placeholder/>
+                      <object class="GtkButton" id="userMoveInBtn">
+                        <property name="label" translatable="yes">Подселить</property>
+                        <property name="visible">True</property>
+                        <property name="can-focus">True</property>
+                        <property name="receives-default">True</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="fill">True</property>
+                        <property name="position">9</property>
+                      </packing>
                     </child>
                     <child>
                       <object class="GtkButton" id="leaveButton">
@@ -1336,6 +1346,7 @@
         <child internal-child="action_area">
           <object class="GtkButtonBox" id="evictResponse">
             <property name="can-focus">False</property>
+            <property name="margin-top">20</property>
             <property name="orientation">vertical</property>
             <property name="layout-style">end</property>
             <child>
