@@ -52,3 +52,6 @@ evict_evictBtnId            :: Text = pack "evictBtn"
 
 -- Rent id's
 rent_userMoveInBtnId        :: Text = pack "userMoveInBtn"
+rent_rentBtnId              :: Text = pack "rentBtn"
+rent_beginCalendatId        :: Text = pack "rentBeginDate"
+rent_endCalendatId          :: Text = pack "rentEndDate"

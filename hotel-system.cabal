@@ -13,7 +13,7 @@ extra-source-files:  README.md
 
 library Entities
   hs-source-dirs:      entities
-  exposed-modules:     HistoryItem, Hotel, PersonBase, Room, RoomComfortItem, Tenant
+  exposed-modules:     HistoryItem, Hotel, PersonBase, Room, Tenant
   build-depends:       base >= 4.7 && < 5, time
   default-language:    Haskell2010
 

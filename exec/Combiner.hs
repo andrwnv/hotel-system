@@ -4,7 +4,7 @@ module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
                 , loadRooms, loadRoomInfo, Combiner.deleteBooking
                 , evictFromCurrentRoom, evictDialogHandler, evictFromDialogCancel, riseEvictDialog 
-                ) where
+                , rentMoveInHandler, rentHandler ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -256,13 +256,14 @@ deleteBooking uiBuilder hotel = do
                 False -> print $ "[BOOKING DELETE]: no one selection"
                 _ -> do
                     date <- now
-                    let selectedUser = (PersonBase fn ln pn date)
+                    let selectedUser = (PersonBase.PersonBase fn ln pn date)
                     let updateRoom = RentCore.deleteBooking selectedUser room
                     writeIORef hotel $ replaceRoom hotelCopy updateRoom
 
                     _fillBookingInRoomInfo uiBuilder (R.plannedRents updateRoom) -- Rerender booking tree
                     print $ "[BOOKING DELETE]: success"
 
+-- Evict 
 evictFromCurrentRoom :: Gtk.Builder -> IORef Hotel -> String -> IO ()
 evictFromCurrentRoom uiBuilder hotel payment = do
     hotelCopy <- readIORef hotel
@@ -307,4 +308,57 @@ riseEvictDialog uiBuilder hotel = do
         _ -> do
             Just evictDialog <- MiscView.getBuilderObj uiBuilder ID.evict_dialogId Gtk.Dialog
             #show evictDialog
+
+-- Rent
+rentMoveInHandler :: Gtk.Builder -> IORef Hotel -> IO ()
+rentMoveInHandler uiBuilder hotel = do
+    print "move in handler test"
+
+rentHandler :: Gtk.Builder -> IORef Hotel -> IO ()
+rentHandler uiBuilder hotel = do
+    hotelCopy <- readIORef hotel
+
+    date <- now
+    userView_ <- extractSelectedRow_User uiBuilder ID.users_treeViewId
+    let userView = fromJust userView_
+    let fn = (MiscView.firstName userView) 
+    let ln = (MiscView.secondName userView) 
+    let pn = (MiscView.phoneNumer userView)
+    let isValidSelection = fn /= "" || ln /= "" || pn /= ""
+
+    case isValidSelection of 
+        False -> print "[ERROR]: No one user selected"
+        _ -> do
+            date_ <- now
+
+            let person = PersonBase fn ln pn date_
+            let foundedTenant = findTenantByBase hotelCopy person
+
+            case foundedTenant of 
+                Nothing -> print "[ERROR]: Cant find user"
+                _ -> do
+                    beginDate <- extractDate uiBuilder ID.rent_beginCalendatId
+                    endDate <- extractDate uiBuilder ID.rent_endCalendatId
+
+                    Just activeRoom <- extractComboBoxText uiBuilder ID.room_roomComboBoxID
+                    let index :: Int = read $ unpack activeRoom
+                    let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
+
+                    let isRoomBusy = length (R.busyTime room) /= 0 
+                    case isRoomBusy of 
+                        True -> print "[ERROR]: Current room already busy"
+                        _ -> do
+                            currentDate <- now
+                            let isBeginDateToday = beginDate == currentDate
+                            
+                            case isBeginDateToday of 
+                                False -> do
+                                    let isBusyDates = selectedDaysBusy (R.plannedRents room) [beginDate, endDate]
+                                    let justRenant = fromJust foundedTenant
+                                    let res = rent justRenant room [beginDate, endDate]
+                                    print $ show res 
+                                _ -> do
+                                    print "move in"
+
+    print "test"
 
