@@ -52,7 +52,16 @@ deleteBooking personBase room = updatedRoom
         updatedRoom = Room (Room.roomNumber room) (description room) (tenantPrice room) (dayExpenses room) (busyTime room) (busyBy room) updatedRent
 
 _createBooking :: Tenant -> Room -> [Day] -> Room
-_createBooking person room dates = room
+_createBooking person room dates = res
+    where
+        _roomNumber   = Room.roomNumber room
+        _description  = description room
+        _tenantPrice  = tenantPrice room
+        _dayExpenses  = dayExpenses room
+        _busyTime     = busyTime room
+        _busyBy       = busyBy room
+        _plannedRents = [(person, dates)] ++ plannedRents room
+        res = Room _roomNumber _description _tenantPrice _dayExpenses _busyTime _busyBy _plannedRents
 
 rent :: Tenant -> Room -> [Day] -> IO (Maybe Room)
 rent person room dates = do
@@ -66,9 +75,9 @@ rent person room dates = do
                 True -> return Nothing
                 _ -> do
                     today <- now
-
+                    let isRoomFree = length (busyTime room) == 0 
                     let isToday = dates!!0 == today
-                    case isToday of 
+                    case isToday && isRoomFree of 
                         False -> return $ Just $ _createBooking person room dates
                         _ -> do
                             let _roomNumber   = Room.roomNumber room
