@@ -348,17 +348,24 @@ rentHandler uiBuilder hotel = do
                     case isRoomBusy of 
                         True -> print "[ERROR]: Current room already busy"
                         _ -> do
-                            currentDate <- now
-                            let isBeginDateToday = beginDate == currentDate
-                            
-                            case isBeginDateToday of 
-                                False -> do
-                                    let isBusyDates = selectedDaysBusy (R.plannedRents room) [beginDate, endDate]
-                                    let justRenant = fromJust foundedTenant
-                                    let res = rent justRenant room [beginDate, endDate]
-                                    print $ show res 
+                            let isBusyDates = selectedDaysBusy (R.plannedRents room) [beginDate, endDate]
+                            let justTenant = fromJust foundedTenant
+                            let _base        = Tenant.base justTenant  
+                                _email       = Tenant.email justTenant
+                                _roomNumber  = R.roomNumber room
+
+                            let updatedUser = Tenant _base _email _roomNumber
+                            res <- rent updatedUser room [beginDate, endDate]
+
+                            case res of 
+                                Nothing -> print "[ERROR]: incorrect dates sequence or already booked"
                                 _ -> do
-                                    print "move in"
+                                    let updatedUserInHotel = replaceUser hotelCopy updatedUser
+                                    let updatedRoomsInHotel = replaceRoom updatedUserInHotel $ fromJust res
+
+                                    writeIORef hotel updatedRoomsInHotel
+                                    loadRoomInfo uiBuilder hotel
+                                    
+                            print $ show res
 
     print "test"
-

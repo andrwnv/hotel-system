@@ -1,6 +1,9 @@
 {-# LANGUAGE OverloadedStrings, OverloadedLabels, ScopedTypeVariables, LambdaCase, InstanceSigs #-}
 
-module RentCore (selectedDaysBusy, deleteBooking) where
+module RentCore (selectedDaysBusy
+                , deleteBooking
+                , rent
+                , moveIn) where
 
 import Data.Time
 
@@ -30,10 +33,6 @@ selectedDaysBusy (x:xs) selectedDays
         rentBegin = rentDays!!0
         rentEnd = rentDays!!1
 
--- rent :: Room -> [Tenant] -> [Day] -> IO (Maybe Room)
--- rent selectedRoom tenants selectedDays = 
---     isCorrectDays <- isCorrectDatePair selectedDays
---     return selectedRoom
 
 _deleteBooking :: PersonBase -> [Rent] -> [Rent]
 _deleteBooking _ [] = []
@@ -51,3 +50,37 @@ deleteBooking personBase room = updatedRoom
     where
         updatedRent = _deleteBooking personBase (plannedRents room)
         updatedRoom = Room (Room.roomNumber room) (description room) (tenantPrice room) (dayExpenses room) (busyTime room) (busyBy room) updatedRent
+
+_createBooking :: Tenant -> Room -> [Day] -> Room
+_createBooking person room dates = room
+
+rent :: Tenant -> Room -> [Day] -> IO (Maybe Room)
+rent person room dates = do
+    isCorrectDates <- isCorrectDatePair dates
+    
+    case isCorrectDates of
+        False -> return Nothing
+        _ -> do
+            let isBusyDates = selectedDaysBusy (plannedRents room) dates
+            case isBusyDates of
+                True -> return Nothing
+                _ -> do
+                    today <- now
+
+                    let isToday = dates!!0 == today
+                    case isToday of 
+                        False -> return $ Just $ _createBooking person room dates
+                        _ -> do
+                            let _roomNumber   = Room.roomNumber room
+                            let _description  = description room
+                            let _tenantPrice  = tenantPrice room
+                            let _dayExpenses  = dayExpenses room
+                            let _busyTime     = dates
+                            let _busyBy       = [person]
+                            let _plannedRents = plannedRents room
+                            return $ Just $ Room _roomNumber _description _tenantPrice _dayExpenses _busyTime _busyBy _plannedRents
+
+moveIn :: Tenant -> Room -> Room
+moveIn person room = room
+
+
