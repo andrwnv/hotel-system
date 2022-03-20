@@ -46,9 +46,7 @@ main = do
     let targs = map pack args
 
     Gtk.init $ Just targs
-
-    -- print consoleArgs
-
+    
     let (filename, dataTxt) = case length args < 2 of 
                                   True -> error "Too few command line arguments."
                                   _ -> (targs!!0, targs!!1)
