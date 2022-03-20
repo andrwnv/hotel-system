@@ -54,14 +54,20 @@ deleteBooking personBase room = updatedRoom
 _createBooking :: Tenant -> Room -> [Day] -> Room
 _createBooking person room dates = res
     where
+        _tenantBase = base person
+        _email = email person
+        updatedPerson = Tenant _tenantBase _email (-1)
+
         _roomNumber   = Room.roomNumber room
         _description  = description room
         _tenantPrice  = tenantPrice room
         _dayExpenses  = dayExpenses room
         _busyTime     = busyTime room
         _busyBy       = busyBy room
-        _plannedRents = [(person, dates)] ++ plannedRents room
+        _plannedRents = [(updatedPerson, dates)] ++ plannedRents room
+
         res = Room _roomNumber _description _tenantPrice _dayExpenses _busyTime _busyBy _plannedRents
+
 
 rent :: Tenant -> Room -> [Day] -> IO (Maybe Room)
 rent person room dates = do
@@ -78,14 +84,18 @@ rent person room dates = do
                     let isRoomFree = length (busyTime room) == 0 
                     let isToday = dates!!0 == today
                     case isToday && isRoomFree of 
-                        False -> return $ Just $ _createBooking person room dates
+                        False -> do
+                            return $ Just $ _createBooking person room dates
                         _ -> do
+                            let _base        = Tenant.base person  
+                                _email       = Tenant.email person
+
                             let _roomNumber   = Room.roomNumber room
                             let _description  = description room
                             let _tenantPrice  = tenantPrice room
                             let _dayExpenses  = dayExpenses room
                             let _busyTime     = dates
-                            let _busyBy       = [person]
+                            let _busyBy       = [(Tenant.Tenant _base _email _roomNumber)]
                             let _plannedRents = plannedRents room
                             return $ Just $ Room _roomNumber _description _tenantPrice _dayExpenses _busyTime _busyBy _plannedRents
 

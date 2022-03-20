@@ -361,18 +361,25 @@ rentHandler uiBuilder hotel = do
                     let justTenant = fromJust foundedTenant
                     let _base        = Tenant.base justTenant  
                         _email       = Tenant.email justTenant
-                        _roomNumber  = R.roomNumber room
 
-                    let updatedUser = Tenant _base _email _roomNumber
+                    let updatedUser = Tenant _base _email (-1)
                     res <- rent updatedUser room [beginDate, endDate]
 
                     case res of 
                         Nothing -> print "[ERROR]: incorrect dates sequence or already booked/rented"
                         _ -> do
-                            let updatedUserInHotel = replaceUser hotelCopy updatedUser
-                            let updatedRoomsInHotel = replaceRoom updatedUserInHotel $ fromJust res
+                            let _res = fromJust res
 
-                            writeIORef hotel updatedRoomsInHotel
+                            let udpUserFromRent = R.busyBy _res
+                            case length udpUserFromRent == 0 of
+                                True -> do
+                                    let updatedRoomsInHotel = replaceRoom hotelCopy _res
+                                    writeIORef hotel updatedRoomsInHotel
+                                _ -> do
+                                    let updatedUserInHotel = replaceUser hotelCopy (udpUserFromRent!!0)
+                                    let updatedRoomsInHotel = replaceRoom updatedUserInHotel $ _res
+                                    writeIORef hotel updatedRoomsInHotel
+
                             loadRoomInfo uiBuilder hotel
 
 rentMoveInHandler :: Gtk.Builder -> IORef Hotel -> IO ()
