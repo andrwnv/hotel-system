@@ -84,7 +84,6 @@ main = do
   Connectors.connectButtonClicked builder ID.evict_evictBtnId $ evictDialogHandler builder evictDialog hotelGlobalInstance
 
   -- Rent connectors
-  Connectors.connectButtonClicked builder ID.rent_userMoveInBtnId $ rentMoveInHandler builder hotelGlobalInstance
   Connectors.connectButtonClicked builder ID.rent_rentBtnId $ rentHandler builder hotelGlobalInstance
 
   -- Loading 

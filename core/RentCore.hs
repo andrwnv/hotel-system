@@ -2,8 +2,7 @@
 
 module RentCore (selectedDaysBusy
                 , deleteBooking
-                , rent
-                , moveIn) where
+                , rent ) where
 
 import Data.Time
 
@@ -51,8 +50,24 @@ deleteBooking personBase room = updatedRoom
         updatedRent = _deleteBooking personBase (plannedRents room)
         updatedRoom = Room (Room.roomNumber room) (description room) (tenantPrice room) (dayExpenses room) (busyTime room) (busyBy room) updatedRent
 
-_createBooking :: Tenant -> Room -> [Day] -> Room
-_createBooking person room dates = res
+_isBusyForSelectedDays :: [Day] -> [Day] -> Bool
+_isBusyForSelectedDays rentDays selectedDays = (selectEnd < rentBegin || selectBegin > rentEnd) || (_isSameDates rentDays selectedDays)
+    where
+        selectBegin = selectedDays!!0
+        selectEnd = selectedDays!!1
+        rentBegin = rentDays!!0
+        rentEnd = rentDays!!1
+
+_checkBusyDates :: [Day] -> [Day] -> Bool
+_checkBusyDates selectedDays rentedDays
+    | length selectedDays == 0 || length rentedDays == 0 = False
+    | not (selectedDays!!1 < rentedDays!!0 || selectedDays!!0 > rentedDays!!1) = True
+    | otherwise = False
+
+_createBooking :: Tenant -> Room -> [Day] -> Maybe Room
+_createBooking person room dates
+    | _checkBusyDates dates _busyTime = Nothing
+    | otherwise = Just res
     where
         _tenantBase = base person
         _email = email person
@@ -67,6 +82,8 @@ _createBooking person room dates = res
         _plannedRents = [(updatedPerson, dates)] ++ plannedRents room
 
         res = Room _roomNumber _description _tenantPrice _dayExpenses _busyTime _busyBy _plannedRents
+
+        isNotBusy = length _busyTime
 
 
 rent :: Tenant -> Room -> [Day] -> IO (Maybe Room)
@@ -85,7 +102,7 @@ rent person room dates = do
                     let isToday = dates!!0 == today
                     case isToday && isRoomFree of 
                         False -> do
-                            return $ Just $ _createBooking person room dates
+                            return $ _createBooking person room dates
                         _ -> do
                             let _base        = Tenant.base person  
                                 _email       = Tenant.email person
@@ -98,8 +115,4 @@ rent person room dates = do
                             let _busyBy       = [(Tenant.Tenant _base _email _roomNumber)]
                             let _plannedRents = plannedRents room
                             return $ Just $ Room _roomNumber _description _tenantPrice _dayExpenses _busyTime _busyBy _plannedRents
-
-moveIn :: Tenant -> Room -> Room
-moveIn person room = room
-
 
