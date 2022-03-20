@@ -8,8 +8,10 @@ module Combiner ( createUserHandler, deleteUserHandler
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
+import Data.Time.Calendar
 import Data.IORef
 import Data.Maybe
+
 import Control.Monad
 
 -- Gtk
@@ -65,8 +67,10 @@ createUserHandler uiBuilder hotel = do
 
     let tenantBase = PersonBase (unpack firstName) (unpack lastName) (unpack phoneNumber) birthDay
     let isUserValid = isValidUser tenantBase
+    currDate <- now
+    let isValidBd = (diffDays currDate birthDay) > 5800
 
-    if isUserValid
+    if isUserValid && isValidBd
         then do
             let (users, success) = createUser _users (Tenant tenantBase (unpack email) (-1))
             case success of
