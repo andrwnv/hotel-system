@@ -3,7 +3,8 @@
 module Combiner ( createUserHandler, deleteUserHandler
                 , loadProfitTable
                 , loadRooms, loadRoomInfo, Combiner.deleteBooking
-                , evictFromCurrentRoom, evictDialogHandler, evictFromDialogCancel ) where
+                , evictFromCurrentRoom, evictDialogHandler, evictFromDialogCancel, riseEvictDialog 
+                ) where
 
 -- Prelude
 import Data.Text (Text, unpack, pack)
@@ -286,8 +287,24 @@ evictDialogHandler uiBuilder dialog hotel = do
     evictFromCurrentRoom uiBuilder hotel $ unpack paymentMethod
     loadProfitTable uiBuilder hotel -- Rerender profit tree
 
-    #close dialog
+    #hide dialog
 
 evictFromDialogCancel :: Gtk.Dialog -> IO ()
 evictFromDialogCancel dialog = do
-    #close dialog
+    #hide dialog
+
+riseEvictDialog :: Gtk.Builder -> IORef Hotel -> IO ()
+riseEvictDialog uiBuilder hotel = do
+    Just activeRoom <- extractComboBoxText uiBuilder ID.room_roomComboBoxID
+    let index :: Int = read $ unpack activeRoom
+    
+    hotelCopy <- readIORef hotel
+    let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
+    
+    let evictState = length (R.busyBy room) == 0 || length (R.busyTime room) == 0
+    case evictState of
+        True -> print "[ERROR]: there is no one to evict"
+        _ -> do
+            Just evictDialog <- MiscView.getBuilderObj uiBuilder ID.evict_dialogId Gtk.Dialog
+            #show evictDialog
+

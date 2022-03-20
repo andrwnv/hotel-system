@@ -79,7 +79,8 @@ main = do
 
   -- Evict from room
   Just evictDialog <- Misc.getBuilderObj builder ID.evict_dialogId Gtk.Dialog
-  Connectors.connectButtonClicked builder ID.users_leaveBtnId $ #show evictDialog
+
+  Connectors.connectButtonClicked builder ID.users_leaveBtnId $ riseEvictDialog builder hotelGlobalInstance
   Connectors.connectButtonClicked builder ID.evict_cancelBtnId $ evictFromDialogCancel evictDialog
   Connectors.connectButtonClicked builder ID.evict_evictBtnId $ evictDialogHandler builder evictDialog hotelGlobalInstance
 
