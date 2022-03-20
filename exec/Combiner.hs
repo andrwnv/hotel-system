@@ -264,6 +264,17 @@ deleteBooking uiBuilder hotel = do
                     print $ "[BOOKING DELETE]: success"
 
 -- Evict 
+_evictAllUsers :: [Tenant.Tenant] -> Int -> [Tenant.Tenant]
+_evictAllUsers [] _ = []
+_evictAllUsers (x:xs) roomNum 
+    | (Tenant.roomNumber x) == roomNum = [updatedUser] ++ _evictAllUsers xs roomNum
+    | otherwise = [x] ++ _evictAllUsers xs roomNum
+    where
+        _base        = Tenant.base x  
+        _email       = Tenant.email x
+        _roomNumber  = (-1)
+        updatedUser = Tenant _base _email _roomNumber
+
 evictFromCurrentRoom :: Gtk.Builder -> IORef Hotel -> String -> IO ()
 evictFromCurrentRoom uiBuilder hotel payment = do
     hotelCopy <- readIORef hotel
@@ -275,7 +286,13 @@ evictFromCurrentRoom uiBuilder hotel payment = do
             let index :: Int = read $ unpack activeRoom
             let room = fromJust $ _extractSelectedRoom (rooms hotelCopy) index
             
-            writeIORef hotel $ evict hotelCopy room payment
+            let updatedHotel = evict hotelCopy room payment
+
+            let _tenants = _evictAllUsers (tenants updatedHotel) index
+            let _rooms = rooms updatedHotel
+            let _history = history updatedHotel
+            
+            writeIORef hotel $ Hotel _tenants _rooms _history
 
             loadRoomInfo uiBuilder hotel
             print "[ROOM EVICT]: success"
